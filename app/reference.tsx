@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { mountAboutCarousel } from './about-carousel';
 import { mountCategoryArch } from './category-arch';
 import { mountTestimonials } from './testimonial-carousel';
+import { mountSiteMotion } from './site-motion';
 export default function Reference({ markup, bodyClass }: { markup: string; bodyClass: string }) {
  const root = useRef<HTMLDivElement>(null);
  useEffect(() => {
@@ -10,6 +11,7 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
   const unmountCarousel = root.current ? mountAboutCarousel(root.current) : () => {};
   const unmountArch = root.current ? mountCategoryArch(root.current) : () => {};
   const unmountTestimonials = root.current ? mountTestimonials(root.current) : () => {};
+  const unmountMotion = root.current ? mountSiteMotion(root.current) : () => {};
   function click(event: MouseEvent) {
    const target = (event.target as Element).closest('button');
    if (!target || !root.current?.contains(target)) return;
@@ -29,7 +31,7 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
     if(panel) { const open=target.getAttribute('aria-expanded')!=='true'; target.setAttribute('aria-expanded',String(open)); target.dataset.open=String(open); panel.hidden=!open; panel.style.display=open?'block':'none'; }
    }
   }
-  document.addEventListener('click',click); return () => { document.removeEventListener('click',click); unmountCarousel(); unmountArch(); unmountTestimonials(); };
- },[bodyClass]);
+  document.addEventListener('click',click); return () => { document.removeEventListener('click',click); unmountMotion(); unmountCarousel(); unmountArch(); unmountTestimonials(); };
+ },[bodyClass, markup]);
  return <div ref={root} dangerouslySetInnerHTML={{ __html: markup }} />;
 }
