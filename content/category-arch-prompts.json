@@ -1,0 +1,6 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "User's original Bimm rounded category strip",
+  "generatedFromScratch": true,
+  "sharedPrompt": "One complete 3D category tile from scratch, large soft round pillowy pebble/disc backing included in image, object centred and raised on the front. Match reference near-circular rounded tiles, realistic sculpted matte objects, soft studio lighting, gentle material texture and subtle object-to-tile shadows. Single full tile occupying roughly 85% of square canvas; transparent padding outside tile; readable at 140px. Payam blue #2851CB, green #20D46B, white and dark navy #0C1425, with natural food/produce colours. No writing, numbers, logos, labels or other tiles. Front view, slight three-quarter depth, no extreme tilt, no motion trails."
+}

@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "/en",
+    "/en/business",
+    "/en/deals",
+    "/en/deals/budaors",
+    "/en/deals/budapest",
+    "/en/deals/drammen",
+    "/en/deals/lillestrom",
+    "/en/deals/moss",
+    "/en/deals/oslo",
+    "/en/deals/sandefjord",
+    "/en/deals/sandvika",
+    "/en/deals/tromso",
+    "/en/deals/vestby",
+    "/en/deals/veszprem",
+    "/en/norway-on-a-budget",
+    "/en/students",
+    "/en/where-to-eat-in-oslo",
+    "/blog",
+    "/help"
+  ],
+  "assets": 61,
+  "errors": []
+}
