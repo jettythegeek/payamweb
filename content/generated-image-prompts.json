@@ -1,0 +1,21 @@
+{
+  "tool": "Built-in image_gen",
+  "references": [
+    "public/reference/d4492fc747fc9a85.webp",
+    "public/reference/500638ac4afc8169.webp"
+  ],
+  "prompts": [
+    [
+      "everyday",
+      "Create a landscape 3:2 marketing image for Payam everyday categories, visually aligned with the supplied Bimm photo card reference (style only; do not copy the pictured food). Premium photorealistic cutout collage on a clean light off-white background: a Nigerian young woman's natural hand holding a smartphone with a plain blue screen, a shopping bag, fresh grocery produce and a neatly presented Nigerian rice meal. Four balanced generous shapes, rounded photo crops with a flowing bold Payam blue #2851CB ribbon and small green #20D46B accent. Crisp bright daylight, real textures, playful but clean Scandinavian app landing-page art direction. No labels, letters, logos, numbers or watermarks. Not cartoon people. Roomy simple composition that works at 600px wide."
+    ],
+    [
+      "money",
+      "Create a landscape 3:2 Payam shared-payments illustration for a premium app landing page. Match the supplied Bimm visual reference's clean simple playful flat illustration style, adapted to Payam blue #2851CB and green #20D46B. On pale blue #F1F5FF background, one large tilted white rounded payment card, three simple circular abstract profile symbols linked to it by clean flowing blue lines, small overlapping coin discs, a large green confirmation check. Flat shapes with very subtle depth, not plastic 3D, uncluttered generous spacing. No text, no numbers, no currency amounts, no logos, no watermark. Image should clearly communicate coordinating payments together. Landscape 3:2."
+    ],
+    [
+      "local",
+      "Create a landscape 3:2 premium photorealistic marketing image for Payam local services and helping someone else. Use supplied Bimm photo card as style reference only: bright clean editorial cutout photography, bold flat colour backdrop, rounded cropped photo shapes and a flowing accent ribbon. Scene: a Nigerian female homeowner warmly greeting a Nigerian male home-repair professional at her doorway, natural expressions and anatomically correct hands, professional holding a modest toolbox. Pair a large rounded photo crop with a small decorative white rounded card containing only a simple green check symbol. Pale off-white backdrop, Payam blue #2851CB ribbon and green #20D46B accent. Modern trustworthy everyday-life feel. No visible written text, no logos, no watermark. Not a cartoon or illustrated people."
+    ]
+  ]
+}

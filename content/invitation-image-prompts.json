@@ -1,0 +1,13 @@
+{
+  "tool": "Built-in image_gen",
+  "prompts": [
+    [
+      "business",
+      "Create a premium website campaign photograph, landscape 3:2, for 'Sell products or offer services on Payam'. Dedicated Nigerian local-commerce scene: a confident female shop owner in a contemporary small grocery shop on the left holding a paper bag with a few groceries, and a male skilled electrician on the right holding a compact toolbox. Both friendly authentic adults, natural skin texture, realistic clothing, separate people not merging. Art direction: Bimm-style crisp studio-lit photorealistic cutout montage, large rounded portrait crops, bold simple flat backdrop, not a cartoon, not generic office stock. Dominant background pale blue #DCE6FF with one flowing blue #2851CB ribbon behind subjects and restrained bright green #20D46B accent. Subjects composed in lower two-thirds with room at top for website UI overlays added later. No writing, no letters, no logos, no text or UI baked into image. Focus clearly on independent merchants AND service providers joining a local marketplace. No reused doorway scene, no handshake."
+    ],
+    [
+      "recipient",
+      "Create a premium landscape 3:2 website campaign photograph for 'Pay or order for someone else'. A warm, specific Nigerian family-support composition: on left a young adult Nigerian woman at home looking at her smartphone with a calm affectionate smile, on right her older mother in a different home receiving a grocery paper bag and smiling. Two separate large rounded photo vignettes joined by a sweeping simple blue ribbon, clearly two places, not standing together. Natural realistic photography, skin and fabric texture, bright clean daylight. Bimm-inspired bold uncluttered cutout collage, background very pale warm ivory, Payam blue #2851CB and small green #20D46B accents. Subjects large and recognizable, image mainly portraits and grocery bag rather than a blank phone screen. Generous clean margins. No text, no logos, no currency, no icons pretending to prove a completed payment. This is a dedicated 'help family from elsewhere' image, not a food category montage or service-provider photo."
+    ]
+  ]
+}

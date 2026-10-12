@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "/",
+    "/acceptable-use-policy",
+    "/bedrift",
+    "/blog",
+    "/cookies",
+    "/deals",
+    "/deals/budaors",
+    "/deals/budapest",
+    "/deals/drammen",
+    "/deals/lillestrom",
+    "/deals/moss",
+    "/deals/oslo",
+    "/deals/sandefjord",
+    "/deals/sandvika",
+    "/deals/tromso",
+    "/deals/vestby",
+    "/deals/veszprem",
+    "/download",
+    "/en/norway-on-a-budget",
+    "/help",
+    "/hvor-skal-vi-spise",
+    "/mobile/privacy-policy",
+    "/privacy-policy",
+    "/student",
+    "/terms-of-service"
+  ],
+  "assets": 61,
+  "errors": [
+    {
+      "page": "/download",
+      "error": "'NoneType' object is not subscriptable"
+    }
+  ]
+}

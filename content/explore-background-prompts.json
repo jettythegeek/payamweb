@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen",
+  "prompts": [
+    [
+      "everyday",
+      "Portrait 3:4 background for the tall left tile titled Explore your everyday. Photorealistic close-up of a Nigerian woman's dark-brown hands holding a clean smartphone and a kraft grocery/shopping bag, with a hint of green produce. Objects primarily in lower-right two-thirds; upper-left half and lower-left edge must remain calm solid dark Payam blue #1837A3 so white website headings and a button can overlay. Bold flowing Payam-blue #2851CB and green #20D46B abstract shapes at right and bottom. Bright natural texture and premium cutout-photo graphic art direction, no cartoon, no image text, no logos, no fake app UI. Match the supplied reference's simple flat colour plus close-up photography style but create a distinct Nigerian everyday-commerce visual."
+    ],
+    [
+      "food-grocery",
+      "Landscape 5:3 background for the Food and groceries tile. A dark-brown Nigerian hand presents a beautiful bowl of Nigerian jollof rice, grilled chicken and plantain in the lower-right, with fresh tomatoes, peppers and leafy vegetables in a modest market grocery basket at upper-right. Premium crisp photorealistic cutout collage on deep green #139653. Keep the LEFT 48% predominantly solid deep green, clear and uncluttered for white heading, supporting copy and bottom-left button. Restrained Payam blue #2851CB curved graphic and bright green #20D46B accent on right only. Match supplied Bimm photograph-plus-bold-geometric-background style, no cartoon, no writing, no logos, no labels. Fill canvas edge to edge; website provides rounded clipping."
+    ],
+    [
+      "shopping-services",
+      "Landscape 5:3 background for Shopping and services tile. A Nigerian young male home-service professional in contemporary blue workwear, holding a compact toolbox, photographed as a clean smiling cutout on the RIGHT half. A kraft shopping bag and a neatly wrapped parcel sit at lower-right to represent local products alongside practical help. Left 48% must remain calm solid dark navy #0C1425 for white website title, paragraph and bottom-left button. Distinct sweeping Payam blue #2851CB and green #20D46B shapes behind subject at right. Premium photographic texture, natural anatomy, bright studio lighting, simple strong composition matching Bimm's cutout-photo/background design language. No reused model, no text, no logos, no labels, no cartoon. Fill canvas; website handles rounded corners."
+    ]
+  ]
+}

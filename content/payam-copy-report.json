@@ -1,0 +1,33 @@
+{
+  "changed": [
+    "acceptable-use-policy.json",
+    "bedrift.json",
+    "blog.json",
+    "business.json",
+    "cookies.json",
+    "deals.json",
+    "deals__budaors.json",
+    "deals__budapest.json",
+    "deals__drammen.json",
+    "deals__lillestrom.json",
+    "deals__moss.json",
+    "deals__oslo.json",
+    "deals__sandefjord.json",
+    "deals__sandvika.json",
+    "deals__tromso.json",
+    "deals__vestby.json",
+    "deals__veszprem.json",
+    "en__norway-on-a-budget.json",
+    "help.json",
+    "home.json",
+    "hvor-skal-vi-spise.json",
+    "mobile__privacy-policy.json",
+    "norway-on-a-budget.json",
+    "privacy-policy.json",
+    "student.json",
+    "students.json",
+    "terms-of-service.json",
+    "where-to-eat-in-oslo.json"
+  ],
+  "verification": "Identical tags, classes, styles, links and non-logo image sources."
+}

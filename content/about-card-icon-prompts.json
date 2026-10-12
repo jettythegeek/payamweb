@@ -1,0 +1,12 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "public/reference/9c4e390491570871.webp",
+  "subjects": {
+    "payments": "a smartphone with a blue screen, a simple contactless payment card and one small coin",
+    "food": "a takeaway bowl of Nigerian jollof rice with plantain and a spoon",
+    "services": "a compact blue toolbox with a wrench and screwdriver",
+    "shopping": "a blue shopping bag with neat handles and a small parcel",
+    "grocery": "a grocery basket with tomatoes, leafy vegetables and a bottle"
+  },
+  "style": "Single isolated matte rounded 3D icon, three-quarter view, Payam blue/white/green, transparent background, no text; match supplied Bimm coffee cup."
+}
