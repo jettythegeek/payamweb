@@ -37,7 +37,7 @@ type Errors = Partial<Record<'phone' | 'city' | 'roles' | 'email' | 'consent' | 
 type Outcome =
   | { kind: 'joined'; code: string; city: string; count: number }
   | { kind: 'duplicate' }
-  | { kind: 'network' | 'rate' | 'verification' }
+  | { kind: 'network' | 'rate' | 'verification' | 'configuration' }
 
 function plausible(event: string) {
   if (!process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN) return
@@ -247,6 +247,7 @@ export function WaitlistForm({
         plausible('waitlist_duplicate')
       } else if (response.status === 429) setOutcome({ kind: 'rate' })
       else if (response.status === 422 && 'error' in body && body.error === 'verification_failed') setOutcome({ kind: 'verification' })
+      else if (response.status === 503 && 'error' in body && body.error === 'not_configured') setOutcome({ kind: 'configuration' })
       else setOutcome({ kind: 'network' })
     } catch {
       setOutcome({ kind: 'network' })
@@ -321,6 +322,7 @@ export function WaitlistForm({
 }
 
 function OutcomeAlert({ outcome }: { outcome: Exclude<Outcome, { kind: 'joined' | 'duplicate' }> }) {
+  if (outcome.kind === 'configuration') return <div className="wl-alert wl-alert--danger" role="status"><strong>Waitlist setup needed</strong><span>The local waitlist database is not connected yet. No details were saved.</span></div>
   if (outcome.kind === 'rate') return <div className="wl-alert" role="status"><strong>Too many tries</strong><span>Please wait a minute, then try again.</span></div>
   if (outcome.kind === 'verification') return <div className="wl-alert" role="status"><strong>Security check needed</strong><span>Please complete the security check and try again.</span></div>
   return <div className="wl-alert wl-alert--danger" role="status"><strong>Network wahala</strong><span>{NETWORK_ERROR}</span></div>
