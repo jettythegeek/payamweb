@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../.next/static/', import.meta.url));
-const forbidden = ['SUPABASE_SERVICE_ROLE_KEY', 'service_role', 'sb_secret_', 'WAITLIST_ADMIN', 'WAITLIST_SESSION_SECRET'];
-const keyPrefix = process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 24);
+const forbidden = ['TURSO_AUTH_TOKEN', 'TURSO_DATABASE_URL', 'WAITLIST_ADMIN', 'WAITLIST_SESSION_SECRET'];
+const keyPrefix = process.env.TURSO_AUTH_TOKEN?.slice(0, 24);
 if (keyPrefix) forbidden.push(keyPrefix);
 
 async function files(dir) {

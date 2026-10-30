@@ -14,3 +14,11 @@ Agent: Codex (`/root`). Task: WEBSITE-001.
 This checkout originally contained only `.env.example`, with no database or admin settings. Local admin credentials have now been generated in ignored `.env.local`. Supabase URL/service-role key and applied SQL migration are still required. Production must also have Turnstile configured. Owner has been asked whether the failing site is local/live and where its configuration resides. No live login or real signup completion is claimed until those settings are supplied and end-to-end persistence is verified.
 
 The existing Next.js release reports a security update recommendation; dependency upgrade is not included in this patch.
+
+## Turso migration
+
+- Owner selected Turso. Supabase runtime dependency replaced by server-only libSQL storage; old SQL kept as historical migration reference.
+- Implemented signups, duplicate protection, cryptographic referral allocation, dashboard filters/counts, phone masking/reveal, CSV export, status changes, atomic deletion audit evidence and persistent atomic rate limits.
+- Added idempotent explicit `db:setup`; ignored database files and credentials. Local SQLite supported explicitly; Vercel rejects local files.
+- Owner supplied hosted database URL and added its auth token privately. Applied schema successfully to the hosted database. No sample signup records inserted into the hosted database.
+- 52 tests pass, including real isolated SQLite lifecycle tests and signup/admin-session handlers. Hosted deployment environment variables and production Turnstile still require hosting configuration; no deployment performed.

@@ -1,3 +1,4 @@
+import { storageConfigured } from '../../../lib/turso';
 import { rateLimit } from '../../../lib/rate-limit';
 import { getClientIp, hashPrivateValue } from '../../../lib/request-security';
 import { join } from '../../../lib/waitlist-store';
@@ -18,7 +19,7 @@ export async function POST(request:Request){
   let body:JoinBody;try{body=await request.json()}catch{return json({error:'invalid'},400)}
   const city=typeof body.city==='string'?body.city.trim():'';
   if(typeof body.company_website==='string'&&body.company_website.trim())return json({status:'joined',referral_code:'',referrals_count:0,city},201);
-  if(process.env.NODE_ENV!=='test'&&(!process.env.SUPABASE_URL||!process.env.SUPABASE_SERVICE_ROLE_KEY||!process.env.IP_HASH_SALT))return json({error:'not_configured'},503);
+  if(process.env.NODE_ENV!=='test'&&(!storageConfigured()||!process.env.IP_HASH_SALT))return json({error:'not_configured'},503);
   const validated=validateJoin(body);if(!validated.ok)return json({error:'invalid',fields:validated.fields},422);const value=validated.value;
   if(Date.now()-value.formRenderedAt<2000)return json({error:'too_fast'},422);
   const ip=getClientIp(request.headers);let ipHash:string|null=null;let phoneHash:string;
