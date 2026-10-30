@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { BadgeCheck, MapPinned, UsersRound } from 'lucide-react'
 import { cityFromSlug, WAITLIST_CITIES } from './cities'
 import { waitlistConsentText } from './consent'
 import { maskPhone, normaliseNigerianPhone, PHONE_ERROR } from './phone'
@@ -268,7 +269,7 @@ export function WaitlistForm({
         </div>
         {errors.phone && <p id={`phone-error-${variant}`} className="wl-error" aria-live="polite">{errors.phone}</p>}
         <p className="wl-micro">We&apos;ll only message you about Payam&apos;s launch. We won&apos;t share your number. Reply STOP anytime. <a href="/privacy-policy">Privacy Policy</a></p>
-        {variant !== 'compact' && <div className="wl-chips" aria-label="Waitlist benefits"><span>✓ Free to join</span><span>✓ Your city choice is a vote</span><span>✓ Customers, sellers, providers and drivers</span></div>}
+        {variant !== 'compact' && <div className="wl-chips" aria-label="Waitlist benefits"><span><BadgeCheck aria-hidden="true" />Free to join</span><span><MapPinned aria-hidden="true" />Your city choice is a vote</span><span><UsersRound aria-hidden="true" />Customers, sellers, providers and drivers</span></div>}
       </form>
     )
   }

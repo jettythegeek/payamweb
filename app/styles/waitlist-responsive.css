@@ -16,6 +16,20 @@
   white-space: nowrap;
 }
 
+.payam-waitlist-slot .wl-chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.payam-waitlist-slot .wl-chips svg {
+  width: 16px;
+  height: 16px;
+  color: #2851cb;
+  stroke-width: 1.9;
+  flex: none;
+}
+
 @media (max-width: 640px) {
   .payam-waitlist-slot .wl-phone-row {
     grid-template-columns: auto minmax(0, 1fr);
