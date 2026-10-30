@@ -128,6 +128,37 @@
   height: 22px;
 }
 
+.wl-progress-row {
+  align-items: center;
+  color: var(--wl-muted);
+  display: flex;
+  font-size: 13px;
+  justify-content: space-between;
+  margin: -10px 0 7px;
+}
+
+.wl-progress-row strong {
+  color: var(--wl-blue);
+  font-weight: 700;
+}
+
+.wl-progress {
+  background: #e8edf7;
+  border-radius: 999px;
+  height: 7px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.wl-progress > span {
+  background: var(--wl-blue);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  width: 50%;
+}
+
 .wl-check svg {
   width: 16px;
   height: 16px;

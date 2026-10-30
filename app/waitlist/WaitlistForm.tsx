@@ -281,6 +281,8 @@ export function WaitlistForm({
       <p className="wl-step">Step 2 of 2</p>
       <h2>Almost done. Where should Payam open first?</h2>
       <p className="wl-subtitle">We open one city at a time. Your pick is a vote, not a launch date.</p>
+      <div className="wl-progress-row"><span>Progress</span><strong>50%</strong></div>
+      <div className="wl-progress" role="progressbar" aria-label="Waitlist signup progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={50}><span /></div>
       {outcome && <OutcomeAlert outcome={outcome} />}
       <div className="wl-columns">
         <div>
