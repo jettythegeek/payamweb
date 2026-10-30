@@ -101,6 +101,10 @@ export function WaitlistForm({
       setCity(selected.name)
       setCityQuery(selected.name)
     }
+    const selectedRole = params.get('role')
+    if (selectedRole && ['use', 'sell', 'serve', 'drive'].includes(selectedRole)) {
+      setRoles([selectedRole as WaitlistRole])
+    }
     if (params.get('intent') === 'business') {
       setBusinessIntent(true)
       window.setTimeout(() => phoneRef.current?.focus(), 0)
