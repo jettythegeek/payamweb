@@ -12,7 +12,7 @@ import {
 import { ArrowLeft, BadgeCheck, CarFront, Check, CheckCircle2, ChevronDown, CircleCheckBig, Info, LockKeyhole, MapPin, MapPinned, Search, Store, UserRound, UsersRound, Wrench } from 'lucide-react'
 import { cityFromSlug, WAITLIST_CITIES } from './cities'
 import { waitlistConsentText } from './consent'
-import { maskPhone, normaliseNigerianPhone, PHONE_ERROR } from './phone'
+import { limitNigerianPhoneInput, maskPhone, normaliseNigerianPhone, PHONE_ERROR } from './phone'
 import type { JoinResponse, WaitlistRole, WaitlistVariant } from './types'
 import { Turnstile } from './Turnstile'
 
@@ -266,7 +266,7 @@ export function WaitlistForm({
         <label className="wl-label" htmlFor={`waitlist-phone-${variant}`}>Your WhatsApp number</label>
         <div className="wl-phone-row">
           <span className="wl-prefix" aria-hidden="true"><span className="wl-flag" />+234</span>
-          <input ref={phoneRef} id={`waitlist-phone-${variant}`} value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" autoComplete="tel-national" placeholder="803 123 4567" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? `phone-error-${variant}` : undefined} />
+          <input ref={phoneRef} id={`waitlist-phone-${variant}`} value={phone} onChange={(event) => setPhone(limitNigerianPhoneInput(event.target.value))} inputMode="tel" autoComplete="tel-national" placeholder="803 123 4567" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? `phone-error-${variant}` : undefined} />
           <button type="submit" className="wl-button">Join the waitlist</button>
         </div>
         {errors.phone && <p id={`phone-error-${variant}`} className="wl-error" aria-live="polite">{errors.phone}</p>}

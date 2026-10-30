@@ -9,6 +9,21 @@ export function normaliseNigerianPhone(value: string): string | null {
 
 export const normalizeNigerianPhone = normaliseNigerianPhone
 
+export function limitNigerianPhoneInput(value: string) {
+  const digits = value.replace(/\D/g, '')
+  const limit = digits.startsWith('234') ? 13 : digits.startsWith('0') ? 11 : 10
+  let seen = 0
+  let result = ''
+  for (const character of value) {
+    if (/\d/.test(character)) {
+      if (seen >= limit) continue
+      seen += 1
+    }
+    result += character
+  }
+  return result
+}
+
 export function maskPhone(value: string) {
   const digits = value.replace(/\D/g, '')
   if (digits.length < 7) return value
