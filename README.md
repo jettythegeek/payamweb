@@ -1,54 +1,38 @@
-# Payam Website
+# Payam waitlist website
 
-Payam brings everyday payments, shopping, food, transport, services, health and business needs together in one app. Its public website introduces the product and helps visitors explore how Payam connects people with local businesses and services.
+Standalone Next.js 16 website for Payam's city-by-city launch waitlist. It stores signups in a private Supabase Postgres project, offers a server-protected operations dashboard at `/waitlist-admin`, and runs on Vercel or a Node.js VPS without Laravel.
 
-This repository contains the Payam visitor website, including page content, visual assets, responsive layouts and interactive features.
+## Local setup
 
-## Website content
-
-- Product introduction and everyday-use categories.
-- Business and student pages.
-- Deals, articles and local guides.
-- Help and frequently asked questions.
-- Privacy, terms and other policy pages.
-
-The homepage includes animated category displays and carousels, with navigation and expandable FAQ answers. The website is under active development; page content and destinations should be reviewed before public release.
-
-## Technology
-
-- Next.js App Router
-- React and TypeScript
-- CSS and GSAP for styling and animation
-- Lucide icons
-
-## Local development
-
-Run these commands from the repository directory:
+Use Node.js 22 or newer.
 
 ```bash
 npm install
+copy .env.example .env.local
 npm run dev
 ```
 
-Open [localhost:3005](http://127.0.0.1:3005) in your browser.
+Open `http://127.0.0.1:3005`. Apply `supabase/migrations/20261030120000_waitlist.sql` to a private Supabase project, then fill the server-only values in `.env.local`. Never expose `SUPABASE_SERVICE_ROLE_KEY` through a `NEXT_PUBLIC_` variable.
 
-## Validation and production build
+Generate the initial admin password hash interactively with `npm run admin:hash`, and create a random `WAITLIST_SESSION_SECRET` of at least 32 characters. The admin email defaults to `waitlist@payam.ng`; change the environment value if needed.
+
+## Validation
 
 ```bash
 npm run typecheck
+npm test
 npm run build
-npm run start
+npm run check:bundle
 ```
 
-`npm run start` serves the production build on port 3005. Run `npm run build` first.
+## Waitlist data
 
-## Project structure
+The database keeps consent evidence, referral attribution, rate-limit state and deletion audit hashes. Row-level security is enabled with no browser-facing policies or grants. Export current records from the admin dashboard as CSV. Deletion is available from the dashboard and records a non-reversible audit hash rather than the removed personal data.
 
-```text
-app/       Page routing, shared layout, styles and interactive components
-content/   Page content and asset metadata
-public/    Images, fonts and other static assets
-scripts/   Project maintenance utilities
-```
+Do not add sample signups or publish counts. Launch messages should be sent only to people who gave the relevant consent, and opt-out or deletion requests must be honoured promptly.
 
-Page routes are handled by `app/[[...slug]]/page.tsx`, with content loaded from JSON files in `content/`. Shared styling lives in `app/globals.css`.
+## Deployment
+
+On Vercel, import this repository, set the environment values from `.env.example`, use Node.js 22, and deploy. On Webuzo or another VPS, follow `docs/DEPLOY-VPS.md`; `output: 'standalone'` produces the portable Node server.
+
+See `docs/WAITLIST-MIGRATION.md` for database setup and operational checks.

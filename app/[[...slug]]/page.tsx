@@ -1,14 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { notFound } from 'next/navigation';
-import Reference from '../reference';
-export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
- const { slug: incoming = [] } = await params;
- const slug = incoming[0] === 'en' ? incoming.slice(1) : [...incoming];
- const aliases: Record<string, string> = { bedrift: 'business', businesses: 'business', student: 'students', 'hvor-skal-vi-spise': 'where-to-eat-in-oslo' };
- if (slug.length === 1 && aliases[slug[0]]) slug[0] = aliases[slug[0]];
- if (slug.some(segment => !/^[a-zA-Z0-9-]+$/.test(segment))) notFound();
- let page;
- try { page = JSON.parse(await readFile(path.join(process.cwd(), 'content', slug.length ? slug.join('__') + '.json' : 'home.json'), 'utf8')); } catch { notFound(); }
- return <><title>{page.title}</title>{page.styles.map((href: string) => <link key={href} rel="stylesheet" href={href} />)}<Reference markup={page.html} bodyClass={page.bodyClass} /></>;
-}
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { BusinessPage, HomePage, LegalPage } from '../components'
+const pages=new Set(['','business','privacy-policy','terms-of-service'])
+export async function generateMetadata({params}:{params:Promise<{slug?:string[]}>}):Promise<Metadata>{const key=(await params).slug?.join('/')||'';if(!pages.has(key))return{};const title=key==='business'?'Payam for Business':key==='privacy-policy'?'Privacy Policy':key==='terms-of-service'?'Terms of Service':'Join the Payam waitlist';const description=key===''?'Vote for your city and be first to hear when Payam launches.':key==='business'?'Join the Payam business waitlist as a seller, service provider or driver.':`${title} for the Payam waitlist.`;return{title,description,alternates:{canonical:key?`/${key}`:'/'},openGraph:{title,description,type:'website',locale:'en_NG',images:['/opengraph-image']},twitter:{card:'summary_large_image',title,description}}}
+export default async function Page({params}:{params:Promise<{slug?:string[]}>}){const key=((await params).slug||[]).join('/');if(!pages.has(key))notFound();if(key==='business')return <BusinessPage/>;if(key==='privacy-policy')return <LegalPage kind="privacy"/>;if(key==='terms-of-service')return <LegalPage kind="terms"/>;return <HomePage/>}
