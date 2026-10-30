@@ -46,8 +46,8 @@ describe('real CSV waitlist lifecycle', () => {
   await withFiles(s=>{s.meta.rates.test.expires=0;});expect(await rateLimit('test',60,2)).toBe(true);
  });
  it('completes the public signup handler only after saving, then authenticates an admin', async () => {
-  vi.stubEnv('IP_HASH_SALT','s'.repeat(32)); vi.stubEnv('TURNSTILE_SECRET_KEY','');
-  const body={phone:'08030000099',city:'Aba',city_is_other:false,roles:['use'],email:'',email_opt_in:false,consent_whatsapp:true,turnstile_token:'local-test',form_rendered_at:Date.now()-3000,company_website:''};
+  vi.stubEnv('IP_HASH_SALT','s'.repeat(32)); vi.stubEnv('TURNSTILE_SECRET_KEY','');vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY','');
+  const body={phone:'08030000099',city:'Aba',city_is_other:false,roles:['use'],email:'',email_opt_in:false,consent_whatsapp:true,turnstile_token:'',form_rendered_at:Date.now()-3000,company_website:''};
   const request=new Request('http://localhost/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   const response=await signup(request);expect(response.status).toBe(201);
   expect((await response.json()).status).toBe('joined');

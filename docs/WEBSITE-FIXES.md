@@ -31,3 +31,10 @@ Agent: Codex (`/root`), WEBSITE-001. Owner chose CSV on persistent VPS storage. 
 Cross-process locking, atomic file replacement and a recoverable private journal guard concurrent/interrupted writes. CSV parsing handles quoted fields/newlines; spreadsheet formula prefixes are protected on disk and round-trip correctly. Corrupt input fails without overwriting it. Files and credentials remain outside public assets and Git. Vercel refuses persistent CSV collection rather than pretending to save.
 
 Existing hosted Turso data was checked with the explicit one-off import command: no signup records existed, so no customer data was changed. A non-overwriting import command remains available; the website runtime does not use Turso. Existing admin credentials remain valid. Fifty-five tests pass, including file-backed lifecycle, concurrent joins/duplicates, CSV edge cases, signup handler and admin session verification. Deploy requires a writable persistent private directory, existing admin settings and production Turnstile keys.
+
+
+## Signup second-screen regression
+
+Codex (`/root`), WEBSITE-001. Reproduced the mismatch: the form has an empty token when no Turnstile widget is configured, but server validation required one unconditionally. Made Turnstile optional when both keys are absent, consistently across validation and verification; enabled protection still rejects missing/invalid tokens. Existing honeypot/timing controls remain, and rate-limiter storage failures now fail closed. Browser privacy restrictions on session storage and optional analytics failures no longer interrupt signup.
+
+58 tests pass including the actual empty-token form payload, required-token protection and rate-limit failure. Live local HTTP verification: admin login 200; exact form signup 201 joined; record read from CSV and found in dashboard; synthetic test records removed through the authenticated deletion endpoint. No real customer signup was removed. Owner deployment URL remains unconfirmed; CSV storage still requires persistent VPS disk, not Vercel.

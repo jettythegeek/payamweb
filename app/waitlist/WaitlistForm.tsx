@@ -42,7 +42,7 @@ type Outcome =
 function plausible(event: string) {
   if (!process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN) return
   const w = window as Window & { plausible?: (name: string, options?: object) => void }
-  w.plausible?.(event)
+  try { w.plausible?.(event) } catch { /* Optional analytics must never interrupt signup. */ }
 }
 
 function currentSiteUrl() {
@@ -53,7 +53,7 @@ function captureAttribution() {
   const params = new URLSearchParams(window.location.search)
   for (const key of ['ref', 'utm_source', 'utm_medium', 'utm_campaign']) {
     const value = params.get(key)
-    if (value) sessionStorage.setItem(`payam_waitlist_${key}`, value.slice(0, 100))
+    if (value) { try { sessionStorage.setItem(`payam_waitlist_${key}`, value.slice(0, 100)) } catch { /* Storage can be blocked by browser privacy settings. */ } }
   }
 }
 
@@ -218,7 +218,7 @@ export function WaitlistForm({
     setOutcome(null)
     plausible('waitlist_submit')
     const finalCity = city === '__other__' ? otherCity.trim() : city
-    const stored = (key: string) => sessionStorage.getItem(`payam_waitlist_${key}`) || undefined
+    const stored = (key: string) => { try { return sessionStorage.getItem(`payam_waitlist_${key}`) || undefined } catch { return undefined } }
     const payload = {
       phone: normaliseNigerianPhone(phone),
       city: finalCity,
