@@ -1,0 +1,29 @@
+/* The restored hero keeps number entry compact without changing the shared form states. */
+.payam-waitlist-slot .wl-phone-row {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 1fr) auto;
+  max-width: 620px;
+  margin-inline: auto;
+}
+
+.payam-waitlist-slot .wl-phone-row input {
+  min-width: 0;
+  width: auto;
+}
+
+.payam-waitlist-slot .wl-phone-row .wl-button {
+  width: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .payam-waitlist-slot .wl-phone-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    max-width: 100%;
+  }
+
+  .payam-waitlist-slot .wl-phone-row .wl-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
