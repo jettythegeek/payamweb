@@ -6,6 +6,7 @@ import { mountCategoryArch } from './category-arch';
 import { mountTestimonials } from './testimonial-carousel';
 import { mountSiteMotion } from './site-motion';
 import { WaitlistForm } from './waitlist/WaitlistForm';
+import { BusinessWaitlistSection } from './waitlist/BusinessWaitlistSection';
 import { PAYAM_LEGAL_ENTITY, PAYAM_WHATSAPP_NUMBER } from './site-config';
 export default function Reference({ markup, bodyClass }: { markup: string; bodyClass: string }) {
  const root = useRef<HTMLDivElement>(null);
@@ -38,5 +39,5 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
   }
   document.addEventListener('click',click); return () => { document.removeEventListener('click',click); unmountMotion(); unmountCarousel(); unmountArch(); unmountTestimonials(); };
  },[bodyClass, markup]);
- return <><div ref={root} dangerouslySetInnerHTML={{ __html: markup }} />{waitlistSlots.map((slot) => createPortal(<WaitlistForm variant="hero" legalEntity={PAYAM_LEGAL_ENTITY} whatsappNumber={PAYAM_WHATSAPP_NUMBER} />, slot))}</>;
+ return <><div ref={root} dangerouslySetInnerHTML={{ __html: markup }} />{waitlistSlots.map((slot) => createPortal(slot.dataset.waitlistSlot === 'business' ? <BusinessWaitlistSection /> : <WaitlistForm variant="hero" legalEntity={PAYAM_LEGAL_ENTITY} whatsappNumber={PAYAM_WHATSAPP_NUMBER} />, slot))}</>;
 }
