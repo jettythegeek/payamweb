@@ -90,6 +90,25 @@ svg [fill="#FFFDF9"] { fill: #FFFFFF; }
 @media(max-width:1023px) { .payam-about-carousel { width:290px; right:4%; bottom:0; } .payam-about-icon { width:88px; flex-basis:88px; } .payam-about-icon img { width:84px; } }
 @media(max-width:639px) { .payam-about-carousel { width:260px; right:3%; bottom:-12px; } .payam-about-icon { width:76px; flex-basis:76px; height:124px; } .payam-about-icon img { width:72px; } .payam-about-card h3 { font-size:17px; } .payam-about-card p { font-size:13px; } }
 @media(prefers-reduced-motion:reduce) { .payam-about-track { will-change:auto; } }
+
+/* Waitlist hero: preserves the restored page artwork and replaces only its conversion block. */
+.payam-waitlist-hero-copy { padding-top:32px; }
+.payam-launch-pill { display:inline-flex; align-items:center; gap:10px; padding:11px 20px; margin-bottom:18px; border-radius:999px; background:#fff; color:#0c1425; font-size:16px; line-height:1.2; box-shadow:0 2px 8px rgb(12 20 37 / 3%); }
+.payam-launch-pill>span { width:12px; height:12px; border-radius:50%; background:#20d46b; box-shadow:0 0 0 4px rgb(32 212 107 / 18%); }
+.payam-waitlist-heading { display:flex; flex-direction:column; max-width:1080px; margin:0; color:#0c1425; font-size:clamp(48px,5.2vw,76px); font-weight:600; letter-spacing:-3.2px; line-height:1.02; }
+.payam-waitlist-heading strong { color:#2851cb; font-weight:600; }
+.payam-waitlist-lede { max-width:790px; margin:30px auto 32px; color:#0c1425; font-size:clamp(18px,1.65vw,24px); line-height:1.35; letter-spacing:-.35px; }
+.payam-waitlist-slot { width:min(680px,100%); text-align:left; }
+.payam-waitlist-slot .wl-phone-row { max-width:none; }
+.payam-waitlist-slot .wl-micro { max-width:none; text-align:center; }
+.payam-waitlist-slot .wl-chips { justify-content:center; }
+@media(max-width:767px) {
+ .payam-waitlist-hero-copy { padding-top:18px; }
+ .payam-launch-pill { font-size:13px; margin-bottom:20px; }
+ .payam-waitlist-heading { font-size:clamp(39px,12vw,54px); letter-spacing:-2.3px; }
+ .payam-waitlist-lede { margin:22px auto 26px; font-size:17px; }
+ .payam-waitlist-slot { width:100%; }
+}
 .payam-about-mobile { display:none; }
 @media(max-width:1023px) { .payam-about-desktop { display:none; } .payam-about-mobile { display:block; bottom:-8%; left:50%; right:auto; width:324px; transform:translateX(-50%) scale(.8); transform-origin:bottom center; } .payam-about-mobile .payam-about-icon { width:106px; flex-basis:106px; } .payam-about-mobile .payam-about-icon img { width:100px; } }
 @media(max-width:639px) { .payam-about-mobile { bottom:-10%; transform:translateX(-50%) scale(.72); } }
