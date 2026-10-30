@@ -38,3 +38,6 @@ Existing hosted Turso data was checked with the explicit one-off import command:
 Codex (`/root`), WEBSITE-001. Reproduced the mismatch: the form has an empty token when no Turnstile widget is configured, but server validation required one unconditionally. Made Turnstile optional when both keys are absent, consistently across validation and verification; enabled protection still rejects missing/invalid tokens. Existing honeypot/timing controls remain, and rate-limiter storage failures now fail closed. Browser privacy restrictions on session storage and optional analytics failures no longer interrupt signup.
 
 58 tests pass including the actual empty-token form payload, required-token protection and rate-limit failure. Live local HTTP verification: admin login 200; exact form signup 201 joined; record read from CSV and found in dashboard; synthetic test records removed through the authenticated deletion endpoint. No real customer signup was removed. Owner deployment URL remains unconfirmed; CSV storage still requires persistent VPS disk, not Vercel.
+
+
+Codex (`/root`), WEBSITE-001: Fixed success Lottie layer order: the white check is now above the opaque green circle rather than hidden behind it. Retained existing animation, colours, timings and reduced-motion icon. TypeScript check passed.
