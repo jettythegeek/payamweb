@@ -30,6 +30,97 @@
   flex: none;
 }
 
+.wl-static-phone > span:last-child,
+.wl-secure,
+.wl-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.wl-static-phone > span:last-child svg,
+.wl-secure svg,
+.wl-back svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.wl-city-trigger {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.wl-city-trigger svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wl-muted);
+  flex: none;
+}
+
+.wl-city-search {
+  align-items: center;
+  background: var(--wl-canvas);
+  border-radius: 12px;
+  display: flex;
+  gap: 9px;
+  margin-bottom: 6px;
+  padding: 0 12px;
+}
+
+.wl-city-search svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.wl-city-search input {
+  background: transparent;
+  border: 0;
+  color: var(--wl-ink);
+  font: inherit;
+  min-height: 48px;
+  outline: 0;
+  width: 100%;
+}
+
+.wl-listbox button > svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.wl-other-option {
+  border-top: 1px solid var(--wl-line) !important;
+  margin-top: 5px;
+}
+
+.wl-role-icon {
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  color: var(--wl-blue);
+  display: flex;
+  flex: 0 0 44px;
+  height: 44px;
+  justify-content: center;
+}
+
+.wl-role-icon svg,
+.wl-check svg,
+.wl-result-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wl-check svg {
+  width: 16px;
+  height: 16px;
+}
+
 @media (max-width: 640px) {
   .payam-waitlist-slot .wl-phone-row {
     grid-template-columns: auto minmax(0, 1fr);

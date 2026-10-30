@@ -18,4 +18,9 @@ describe('waitlist cities', () => {
     expect(cityFromSlug('aba')?.name).toBe('Aba')
     expect(cityFromSlug('not-a-city')).toBeUndefined()
   })
+
+  it('excludes cities removed from the current launch vote', () => {
+    const names = WAITLIST_CITIES.map((city) => city.name)
+    expect(names).not.toEqual(expect.arrayContaining(['Ibadan', 'Akure', 'Abeokuta', 'Jos', 'Kaduna', 'Kano']))
+  })
 })

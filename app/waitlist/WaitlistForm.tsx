@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { BadgeCheck, MapPinned, UsersRound } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, CarFront, Check, CheckCircle2, ChevronDown, CircleCheckBig, Info, LockKeyhole, MapPin, MapPinned, Search, Store, UserRound, UsersRound, Wrench } from 'lucide-react'
 import { cityFromSlug, WAITLIST_CITIES } from './cities'
 import { waitlistConsentText } from './consent'
 import { maskPhone, normaliseNigerianPhone, PHONE_ERROR } from './phone'
@@ -29,6 +29,8 @@ const ROLE_COPY: Record<WaitlistRole, { title: string; detail: string }> = {
   serve: { title: 'I offer a service', detail: 'Plumbing, hair, cleaning, repairs…' },
   drive: { title: 'I drive', detail: 'Keke, taxi or premium car' },
 }
+
+const ROLE_ICONS = { use: UserRound, sell: Store, serve: Wrench, drive: CarFront } as const
 
 type Errors = Partial<Record<'phone' | 'city' | 'roles' | 'email' | 'consent' | 'turnstile', string>>
 type Outcome =
@@ -83,7 +85,7 @@ export function WaitlistForm({
   const [businessIntent, setBusinessIntent] = useState(false)
   const renderedAt = useRef(Date.now())
   const phoneRef = useRef<HTMLInputElement>(null)
-  const cityRef = useRef<HTMLInputElement>(null)
+  const cityRef = useRef<HTMLButtonElement>(null)
   const rolesRef = useRef<HTMLDivElement>(null)
   const consentRef = useRef<HTMLInputElement>(null)
   const firedConfetti = useRef(false)
@@ -283,13 +285,14 @@ export function WaitlistForm({
       <div className="wl-columns">
         <div>
           <label className="wl-label" htmlFor={`details-phone-${variant}`}>WhatsApp number</label>
-          <div className="wl-static-phone"><span className="wl-flag" />{maskPhone(normaliseNigerianPhone(phone) || phone)} <span>✓ Looks good</span></div>
+          <div className="wl-static-phone"><span className="wl-flag" />{maskPhone(normaliseNigerianPhone(phone) || phone)} <span><CheckCircle2 aria-hidden="true" />Looks good</span></div>
           <div className="wl-field">
-            <label className="wl-label" htmlFor={`city-${variant}`}>Your city</label>
-            <input ref={cityRef} id={`city-${variant}`} className="wl-input" role="combobox" aria-expanded={cityOpen} aria-controls={`city-list-${variant}`} aria-autocomplete="list" aria-invalid={Boolean(errors.city)} value={city === '__other__' ? 'Other — type your city' : cityQuery} placeholder="Choose or search your city" onFocus={() => setCityOpen(true)} onChange={(event) => { setCity(''); setCityQuery(event.target.value); setCityOpen(true); setActiveCity(0) }} onKeyDown={cityKeyDown} />
+            <label className="wl-label" id={`city-label-${variant}`}>Your city</label>
+            <button ref={cityRef} id={`city-${variant}`} type="button" className="wl-input wl-city-trigger" aria-labelledby={`city-label-${variant} city-${variant}`} aria-haspopup="listbox" aria-expanded={cityOpen} aria-controls={`city-list-${variant}`} aria-invalid={Boolean(errors.city)} onClick={() => setCityOpen((open) => !open)}><span>{city === '__other__' ? 'Other — type your city' : city || 'Select your city'}</span><ChevronDown aria-hidden="true" /></button>
             {cityOpen && <div id={`city-list-${variant}`} role="listbox" className="wl-listbox">
-              {filteredCities.map((item, index) => <button type="button" role="option" aria-selected={city === item.name} className={index === activeCity ? 'is-active' : ''} key={item.slug} onMouseDown={(event) => event.preventDefault()} onClick={() => chooseCity(item.name)}>{item.name}{city === item.name && <span>✓</span>}</button>)}
-              <button type="button" role="option" aria-selected={city === '__other__'} className={activeCity === filteredCities.length ? 'is-active' : ''} onMouseDown={(event) => event.preventDefault()} onClick={() => chooseCity('__other__')}>Other — type your city</button>
+              <div className="wl-city-search"><Search aria-hidden="true" /><input value={cityQuery} placeholder="Search cities" aria-label="Search cities" onChange={(event) => { setCityQuery(event.target.value); setActiveCity(0) }} onKeyDown={cityKeyDown} autoFocus /></div>
+              {filteredCities.map((item, index) => <button type="button" role="option" aria-selected={city === item.name} className={index === activeCity ? 'is-active' : ''} key={item.slug} onClick={() => chooseCity(item.name)}>{item.name}{city === item.name && <Check aria-hidden="true" />}</button>)}
+              <button type="button" role="option" aria-selected={city === '__other__'} className={`wl-other-option ${activeCity === filteredCities.length ? 'is-active' : ''}`} onClick={() => chooseCity('__other__')}><span>Other — type your city</span><MapPin aria-hidden="true" /></button>
             </div>}
             {city === '__other__' && <><input className="wl-input wl-other" value={otherCity} onChange={(event) => setOtherCity(event.target.value)} minLength={2} maxLength={60} placeholder="Type your city" aria-label="Type your city" /><p className="wl-help">We&apos;ll count this as a vote for your city.</p></>}
             {errors.city && <p className="wl-error" aria-live="polite">{errors.city}</p>}
@@ -297,7 +300,7 @@ export function WaitlistForm({
         </div>
         <div>
           <fieldset className="wl-fieldset"><legend>How will you use Payam? <span>Pick all that apply</span></legend><div ref={rolesRef} tabIndex={-1} className="wl-roles">
-            {roleOrder.map((role) => <button key={role} type="button" aria-pressed={roles.includes(role)} className={roles.includes(role) ? 'is-selected' : ''} onClick={() => toggleRole(role)}><span className="wl-role-copy"><strong>{ROLE_COPY[role].title}</strong><small>{ROLE_COPY[role].detail}</small></span><span className="wl-check" aria-hidden="true">{roles.includes(role) ? '✓' : ''}</span></button>)}
+            {roleOrder.map((role) => { const RoleIcon = ROLE_ICONS[role]; return <button key={role} type="button" aria-pressed={roles.includes(role)} className={roles.includes(role) ? 'is-selected' : ''} onClick={() => toggleRole(role)}><span className="wl-role-icon"><RoleIcon aria-hidden="true" /></span><span className="wl-role-copy"><strong>{ROLE_COPY[role].title}</strong><small>{ROLE_COPY[role].detail}</small></span><span className="wl-check" aria-hidden="true">{roles.includes(role) && <Check aria-hidden="true" />}</span></button> })}
           </div></fieldset>
           {errors.roles && <p className="wl-error" aria-live="polite">{errors.roles}</p>}
           <div className="wl-field"><label className="wl-label" htmlFor={`email-${variant}`}>Email <span>(optional)</span></label><input id={`email-${variant}`} className="wl-input" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" aria-invalid={Boolean(errors.email)} /><p className="wl-help">Only if you&apos;d like launch news by email too.</p>{email && <label className="wl-opt-in"><input type="checkbox" checked={emailOptIn} onChange={(event) => setEmailOptIn(event.target.checked)} /> Also send me launch news by email.</label>}{errors.email && <p className="wl-error" aria-live="polite">{errors.email}</p>}</div>
@@ -308,8 +311,8 @@ export function WaitlistForm({
       <input className="wl-honeypot" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <Turnstile onToken={setToken} resetKey={turnstileReset} />
       {errors.turnstile && <p className="wl-error" aria-live="polite">{errors.turnstile}</p>}
-      <div className="wl-actions"><button type="button" className="wl-back" onClick={() => { setStep(1); setOutcome(null); window.setTimeout(() => phoneRef.current?.focus(), 0) }}>← Back</button><button type="submit" className="wl-button" disabled={submitting}>{submitting ? 'Joining…' : 'Join the waitlist'}</button></div>
-      <p className="wl-secure">▣ Your details are stored securely and used only for Payam&apos;s launch.</p>
+      <div className="wl-actions"><button type="button" className="wl-back" onClick={() => { setStep(1); setOutcome(null); window.setTimeout(() => phoneRef.current?.focus(), 0) }}><ArrowLeft aria-hidden="true" />Back</button><button type="submit" className="wl-button" disabled={submitting}>{submitting ? 'Joining…' : 'Join the waitlist'}</button></div>
+      <p className="wl-secure"><LockKeyhole aria-hidden="true" />Your details are stored securely and used only for Payam&apos;s launch.</p>
     </form>
   )
 }
@@ -322,7 +325,7 @@ function OutcomeAlert({ outcome }: { outcome: Exclude<Outcome, { kind: 'joined' 
 
 function DuplicateState({ whatsappNumber }: { whatsappNumber?: string }) {
   const href = whatsappNumber ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent('Hi Payam, I want to change the city or role on my waitlist signup.')}` : undefined
-  return <section className="wl wl-card wl-result" aria-live="polite"><div className="wl-result-icon wl-result-icon--info">i</div><h2>You&apos;re already on the list</h2><p>This number has already joined the Payam waitlist — no need to sign up again. We&apos;ll message you on WhatsApp when we launch in your city.</p>{href && <a className="wl-button wl-button--mint" href={href} target="_blank" rel="noopener noreferrer">Change city or role on WhatsApp</a>}<small>For your privacy we don&apos;t show the details saved for a number.</small></section>
+  return <section className="wl wl-card wl-result" aria-live="polite"><div className="wl-result-icon wl-result-icon--info"><Info aria-hidden="true" /></div><h2>You&apos;re already on the list</h2><p>This number has already joined the Payam waitlist — no need to sign up again. We&apos;ll message you on WhatsApp when we launch in your city.</p>{href && <a className="wl-button wl-button--mint" href={href} target="_blank" rel="noopener noreferrer">Change city or role on WhatsApp</a>}<small>For your privacy we don&apos;t show the details saved for a number.</small></section>
 }
 
 function SuccessState({ outcome, phone, whatsappNumber, copied, setCopied }: { outcome: Extract<Outcome, { kind: 'joined' }>; phone: string; whatsappNumber?: string; copied: boolean; setCopied: (value: boolean) => void }) {
@@ -335,5 +338,5 @@ function SuccessState({ outcome, phone, whatsappNumber, copied, setCopied }: { o
   }, [outcome.code])
   async function copy() { await navigator.clipboard.writeText(link); setCopied(true); plausible('copy_link'); window.setTimeout(() => setCopied(false), 1800) }
   const confirmHref = whatsappNumber ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(`Hi Payam, confirming my waitlist signup. Code: ${outcome.code}`)}` : undefined
-  return <section className="wl wl-card wl-result" aria-live="polite"><div className="wl-result-icon">✓</div><span className="wl-success-pill">E don set</span><h2>You&apos;re on the list.</h2><p>We&apos;ll message you on WhatsApp at <strong>{maskPhone(phone)}</strong> as soon as Payam opens in <strong>{outcome.city}</strong>. No queue numbers — we invite people city by city.</p>{confirmHref && <div className="wl-panel"><span className="wl-panel-number">1</span><div><h3>Confirm your number on WhatsApp</h3><p>Send us one quick message so we know this number is yours. It takes one tap and you can skip it.</p><a className="wl-button wl-button--mint" href={confirmHref} target="_blank" rel="noopener noreferrer">Confirm on WhatsApp</a></div></div>}<div className="wl-panel"><span className="wl-panel-number">2</span><div><h3>Help {outcome.city} open sooner</h3><p>Cities with more sign-ups go live first. Share your link with family, friends and the people you buy from.</p><div className="wl-copy"><span>{link}</span><button type="button" onClick={() => void copy()}>{copied ? 'Copied' : 'Copy link'}</button></div><div className="wl-share"><a className="wl-button" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" onClick={() => plausible('share_whatsapp')}>Share on WhatsApp</a><a className="wl-secondary" href={`https://x.com/intent/post?text=${encodeURIComponent('I just joined the Payam waitlist. Vote for our city:')}&url=${encodeURIComponent(link)}`} target="_blank" rel="noopener noreferrer" onClick={() => plausible('share_x')}>Share on X</a></div><p className="wl-referrals">People who joined with your link: <strong>{count}</strong> so far</p></div></div></section>
+  return <section className="wl wl-card wl-result" aria-live="polite"><div className="wl-result-icon"><CircleCheckBig aria-hidden="true" /></div><span className="wl-success-pill">E don set</span><h2>You&apos;re on the list.</h2><p>We&apos;ll message you on WhatsApp at <strong>{maskPhone(phone)}</strong> as soon as Payam opens in <strong>{outcome.city}</strong>. No queue numbers — we invite people city by city.</p>{confirmHref && <div className="wl-panel"><span className="wl-panel-number">1</span><div><h3>Confirm your number on WhatsApp</h3><p>Send us one quick message so we know this number is yours. It takes one tap and you can skip it.</p><a className="wl-button wl-button--mint" href={confirmHref} target="_blank" rel="noopener noreferrer">Confirm on WhatsApp</a></div></div>}<div className="wl-panel"><span className="wl-panel-number">2</span><div><h3>Help {outcome.city} open sooner</h3><p>Cities with more sign-ups go live first. Share your link with family, friends and the people you buy from.</p><div className="wl-copy"><span>{link}</span><button type="button" onClick={() => void copy()}>{copied ? 'Copied' : 'Copy link'}</button></div><div className="wl-share"><a className="wl-button" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer" onClick={() => plausible('share_whatsapp')}>Share on WhatsApp</a><a className="wl-secondary" href={`https://x.com/intent/post?text=${encodeURIComponent('I just joined the Payam waitlist. Vote for our city:')}&url=${encodeURIComponent(link)}`} target="_blank" rel="noopener noreferrer" onClick={() => plausible('share_x')}>Share on X</a></div><p className="wl-referrals">People who joined with your link: <strong>{count}</strong> so far</p></div></div></section>
 }

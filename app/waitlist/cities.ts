@@ -16,17 +16,11 @@ export const WAITLIST_CITIES: readonly WaitlistCity[] = [
   { slug: 'uyo', name: 'Uyo', priority: true },
   { slug: 'lagos', name: 'Lagos', priority: false },
   { slug: 'abuja-fct', name: 'Abuja (FCT)', priority: false },
-  { slug: 'ibadan', name: 'Ibadan', priority: false },
-  { slug: 'kano', name: 'Kano', priority: false },
   { slug: 'benin-city', name: 'Benin City', priority: false },
-  { slug: 'kaduna', name: 'Kaduna', priority: false },
-  { slug: 'abeokuta', name: 'Abeokuta', priority: false },
-  { slug: 'jos', name: 'Jos', priority: false },
   { slug: 'ilorin', name: 'Ilorin', priority: false },
   { slug: 'warri', name: 'Warri', priority: false },
   { slug: 'calabar', name: 'Calabar', priority: false },
   { slug: 'asaba', name: 'Asaba', priority: false },
-  { slug: 'akure', name: 'Akure', priority: false },
 ] as const
 
 export const CITIES = WAITLIST_CITIES
