@@ -6,6 +6,11 @@
   margin-inline: auto;
 }
 
+.payam-waitlist-slot .wl-step-one > .wl-label {
+  max-width: 620px;
+  margin-inline: auto;
+}
+
 .payam-waitlist-slot .wl-phone-row input {
   min-width: 0;
   width: auto;
@@ -36,6 +41,13 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
+}
+
+.wl-secure {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 16px;
 }
 
 .wl-static-phone > span:last-child svg,
@@ -130,5 +142,14 @@
   .payam-waitlist-slot .wl-phone-row .wl-button {
     grid-column: 1 / -1;
     width: 100%;
+  }
+
+  .payam-waitlist-slot .wl-step-one > .wl-label {
+    max-width: 100%;
+  }
+
+  .wl-secure {
+    align-items: flex-start;
+    text-align: left;
   }
 }
