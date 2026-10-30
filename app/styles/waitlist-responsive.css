@@ -159,6 +159,46 @@
   width: 50%;
 }
 
+.wl-success-animation {
+  height: 112px;
+  margin: -10px auto 4px;
+  width: 112px;
+}
+
+.wl-success-animation > svg {
+  color: var(--wl-green);
+  height: 100%;
+  width: 100%;
+}
+
+.wl-panel-number svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wl-panel .wl-button,
+.wl-copy button,
+.wl-share a,
+.wl-referrals {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.wl-panel .wl-button svg,
+.wl-copy button svg,
+.wl-share a svg,
+.wl-referrals svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+
+.wl-referrals {
+  justify-content: center;
+}
+
+
 .wl-check svg {
   width: 16px;
   height: 16px;
