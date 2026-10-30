@@ -1,0 +1,5 @@
+import { rateLimit } from '../../../../../lib/rate-limit';
+import { getClientIp, hashPrivateValue } from '../../../../../lib/request-security';
+import { referralCount } from '../../../../../lib/waitlist-store';
+export const runtime='nodejs';const REF=/^[23456789ABCDEFGHJKMNPQRSTVWXYZ]{6}$/;const headers={'Cache-Control':'no-store'};
+export async function GET(request:Request,{params}:{params:Promise<{code:string}>}){const code=(await params).code.toUpperCase();if(!REF.test(code))return Response.json({count:0},{headers});let ipHash:string;try{ipHash=hashPrivateValue(getClientIp(request.headers))}catch{return Response.json({count:0},{headers})}try{if(!await rateLimit(`ref:ip:${ipHash}`,60,30))return Response.json({error:'rate_limited'},{status:429,headers})}catch{return Response.json({error:'busy'},{status:503,headers})}try{const{data,error}=await referralCount(code);if(error)return Response.json({error:'busy'},{status:503,headers});return Response.json({count:Number(data)||0},{headers})}catch{return Response.json({error:'busy'},{status:503,headers})}}

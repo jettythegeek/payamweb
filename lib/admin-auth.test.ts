@@ -1,0 +1,10 @@
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+vi.mock('server-only',()=>({}));
+let auth: typeof import('./admin-auth');
+beforeAll(async()=>{auth=await import('./admin-auth')});
+afterEach(()=>{delete process.env.WAITLIST_SESSION_SECRET;delete process.env.WAITLIST_ADMIN_EMAIL;delete process.env.WAITLIST_ADMIN_PASSWORD_HASH});
+describe('admin sessions',()=>{
+  it('rejects missing configuration',()=>{expect(auth.adminConfigured()).toBe(false);expect(auth.verifyAdminSession('x.y')).toBe(false)});
+  it('accepts a signed session and rejects tampering and expiry',()=>{process.env.WAITLIST_SESSION_SECRET='s'.repeat(32);const token=auth.createAdminSession(100);expect(auth.verifyAdminSession(token,101)).toBe(true);expect(auth.verifyAdminSession(`${token}x`,101)).toBe(false);expect(auth.verifyAdminSession(token,100+auth.SESSION_SECONDS)).toBe(false)});
+  it('requires all three admin settings',()=>{process.env.WAITLIST_SESSION_SECRET='s'.repeat(32);process.env.WAITLIST_ADMIN_EMAIL='admin@example.test';process.env.WAITLIST_ADMIN_PASSWORD_HASH='hash';expect(auth.adminConfigured()).toBe(true)});
+});
