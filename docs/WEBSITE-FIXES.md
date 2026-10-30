@@ -41,3 +41,6 @@ Codex (`/root`), WEBSITE-001. Reproduced the mismatch: the form has an empty tok
 
 
 Codex (`/root`), WEBSITE-001: Fixed success Lottie layer order: the white check is now above the opaque green circle rather than hidden behind it. Retained existing animation, colours, timings and reduced-motion icon. TypeScript check passed.
+
+
+Codex (`/root`), WEBSITE-001: Replaced the link-preview letter P tile with the actual app favicon, preserving preview copy, colours and composition. Generated PNG endpoint returned 200 and was visually inspected.
