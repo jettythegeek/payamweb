@@ -22,3 +22,12 @@ The existing Next.js release reports a security update recommendation; dependenc
 - Added idempotent explicit `db:setup`; ignored database files and credentials. Local SQLite supported explicitly; Vercel rejects local files.
 - Owner supplied hosted database URL and added its auth token privately. Applied schema successfully to the hosted database. No sample signup records inserted into the hosted database.
 - 52 tests pass, including real isolated SQLite lifecycle tests and signup/admin-session handlers. Hosted deployment environment variables and production Turnstile still require hosting configuration; no deployment performed.
+
+
+## CSV storage for VPS (supersedes Turso runtime)
+
+Agent: Codex (`/root`), WEBSITE-001. Owner chose CSV on persistent VPS storage. Public signup, dashboard counts/list/status/reveal/delete, referrals, rate limits and admin login now use private file storage without database credentials. Records live in `.data/waitlist/waitlist.csv` unless `WAITLIST_DATA_DIR` selects a private persistent directory. Supporting operational evidence is in `operations.json`.
+
+Cross-process locking, atomic file replacement and a recoverable private journal guard concurrent/interrupted writes. CSV parsing handles quoted fields/newlines; spreadsheet formula prefixes are protected on disk and round-trip correctly. Corrupt input fails without overwriting it. Files and credentials remain outside public assets and Git. Vercel refuses persistent CSV collection rather than pretending to save.
+
+Existing hosted Turso data was checked with the explicit one-off import command: no signup records existed, so no customer data was changed. A non-overwriting import command remains available; the website runtime does not use Turso. Existing admin credentials remain valid. Fifty-five tests pass, including file-backed lifecycle, concurrent joins/duplicates, CSV edge cases, signup handler and admin session verification. Deploy requires a writable persistent private directory, existing admin settings and production Turnstile keys.

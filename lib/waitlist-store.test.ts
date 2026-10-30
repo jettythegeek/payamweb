@@ -1,21 +1,20 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 vi.mock('server-only', () => ({}));
-import { database } from './turso';
+import { withFiles } from './csv-storage';
 import { join, list, summary, referralCount, reveal, setStatus, remove, exportRows } from './waitlist-store';
 import { rateLimit } from './rate-limit';
 import { POST as signup } from '../app/api/waitlist/route';
 import { POST as login } from '../app/api/waitlist-admin/login/route';
 import { verifyAdminSession } from './admin-auth';
 import bcrypt from 'bcryptjs';
-beforeAll(async () => {
- vi.stubEnv('TURSO_DATABASE_URL', ':memory:');
- vi.stubEnv('VERCEL','');
- await database().executeMultiple(readFileSync('database/waitlist.sql','utf8'));
-});
-afterAll(() => { database().close(); vi.unstubAllEnvs(); });
+const dir=mkdtempSync(path.join(tmpdir(),'payam-csv-'));
+beforeAll(() => { vi.stubEnv('WAITLIST_DATA_DIR',dir);vi.stubEnv('VERCEL',''); });
+afterAll(() => { vi.unstubAllEnvs(); const resolved=path.resolve(dir);if(path.dirname(resolved)!==path.resolve(tmpdir())||!path.basename(resolved).startsWith('payam-csv-'))throw new Error('Unexpected cleanup path');rmSync(resolved,{recursive:true,force:true}); });
 const input = { phoneE164:'+2348030000001',phoneHash:'h'.repeat(64),city:'Aba',cityIsOther:false,roles:['use'],email:null,emailOptIn:false,ref:null,utmSource:null,utmMedium:null,utmCampaign:null,ipHash:'i'.repeat(64),userAgent:'storage integration test' };
-describe('real SQLite waitlist lifecycle', () => {
+describe('real CSV waitlist lifecycle', () => {
  it('persists a signup, rejects duplicates and counts referrals', async () => {
   const first=await join(input); expect(first.error).toBeNull(); expect(first.data?.status).toBe('joined');
   expect((await join(input)).data?.status).toBe('duplicate');
@@ -39,12 +38,12 @@ describe('real SQLite waitlist lifecycle', () => {
   expect((await list({status:'unsubscribed'})).data?.total).toBe(1);
   expect((await remove(id,'Owner request','ip-hash')).data).toBe(true);
   expect((await reveal(id,'ip-hash')).data).toBeNull();
-  expect((await database().execute('SELECT phone_hash FROM waitlist_deletions')).rows).toHaveLength(1);
-  expect((await database().execute('SELECT action FROM admin_audit_log')).rows).toHaveLength(3);
+  expect(await withFiles(s=>s.meta.deletions,false)).toHaveLength(1);
+  expect(await withFiles(s=>s.meta.audit,false)).toHaveLength(3);
  });
  it('enforces atomic persistent rate limits and expiry', async () => {
   expect(await rateLimit('test',60,2)).toBe(true);expect(await rateLimit('test',60,2)).toBe(true);expect(await rateLimit('test',60,2)).toBe(false);
-  await database().execute("UPDATE rate_limits SET expires_at=0 WHERE key='test'");expect(await rateLimit('test',60,2)).toBe(true);
+  await withFiles(s=>{s.meta.rates.test.expires=0;});expect(await rateLimit('test',60,2)).toBe(true);
  });
  it('completes the public signup handler only after saving, then authenticates an admin', async () => {
   vi.stubEnv('IP_HASH_SALT','s'.repeat(32)); vi.stubEnv('TURNSTILE_SECRET_KEY','');
@@ -60,5 +59,25 @@ describe('real SQLite waitlist lifecycle', () => {
   expect(signedIn.status).toBe(200);
   const cookie=signedIn.headers.get('set-cookie')!;expect(cookie).toContain('HttpOnly');
   expect(verifyAdminSession(cookie.split(';')[0].slice('payam_admin='.length))).toBe(true);
+ });
+ it('serialises concurrent submissions without lost rows or duplicate IDs', async()=>{
+  const values=await Promise.all(Array.from({length:8},(_,i)=>join({...input,phoneE164:`+23480300001${String(i).padStart(2,'0')}`})));
+  expect(values.every(value=>value.data?.status==='joined')).toBe(true);
+  const rows=await withFiles(s=>s.rows,false);
+  expect(new Set(rows.map(row=>row.id)).size).toBe(rows.length);
+  const duplicates=await Promise.all(Array.from({length:3},()=>join({...input,phoneE164:'+2348030000200'})));
+  expect(duplicates.filter(value=>value.data?.status==='joined')).toHaveLength(1);
+  expect(duplicates.filter(value=>value.data?.status==='duplicate')).toHaveLength(2);
+ });
+ it('round-trips commas, quotes, newlines and formula-like CSV values',async()=>{
+  const city='=Test, "city"\nname';
+  const value=await join({...input,phoneE164:'+2348030000300',city,cityIsOther:true});expect(value.error).toBeNull();
+  expect((await list({city})).data?.rows[0].city).toBe(city);
+  expect(readFileSync(path.join(dir,'waitlist.csv'),'utf8')).toContain("'=Test");
+ });
+ it('does not overwrite an unreadable CSV with an empty list',async()=>{
+  const {writeFileSync}=await import('node:fs');const file=path.join(dir,'waitlist.csv');const saved=readFileSync(file,'utf8');
+  try{writeFileSync(file,'broken,data\n1,2\n');expect((await join({...input,phoneE164:'+2348030000400'})).error).not.toBeNull();expect(readFileSync(file,'utf8')).toBe('broken,data\n1,2\n');}
+  finally{writeFileSync(file,saved);}
  });
 });

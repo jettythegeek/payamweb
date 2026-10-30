@@ -1,4 +1,4 @@
-import { storageConfigured } from '../../../lib/turso';
+import { storageConfigured } from '../../../lib/csv-storage';
 import { rateLimit } from '../../../lib/rate-limit';
 import { getClientIp, hashPrivateValue } from '../../../lib/request-security';
 import { join } from '../../../lib/waitlist-store';

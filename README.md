@@ -1,41 +1,34 @@
 # Payam waitlist website
 
-Next.js visitor website, waitlist and private `/waitlist-admin` dashboard. Storage uses Turso/libSQL. No Supabase connection is required.
+Next.js website with a private CSV-backed waitlist and `/waitlist-admin` dashboard. No Turso or Supabase configuration is required for normal use.
 
-## Local setup
+## Run locally
 
 Use Node.js 22 or newer. From this directory:
 
 ```sh
 npm ci
 node scripts/setup-local-admin.mjs
-```
-
-The admin setup prints a random password and writes private settings to ignored `.env.local`. It refuses to overwrite an existing password. For local storage, create `.data` and add `TURSO_DATABASE_URL=file:.data/waitlist.db` to `.env.local`, then:
-
-```sh
-npm run db:setup
 npm run dev
 ```
 
-Open `http://127.0.0.1:3005`. The local database is ignored by Git. Back it up privately. Never store it in `public/`.
+The setup command creates private admin credentials, a session secret and a privacy salt in ignored `.env.local`. It prints the generated password and refuses to overwrite an existing one. Existing credentials continue to work.
 
-## Hosted Turso for Vercel and VPS
+Signups are automatically saved to `.data/waitlist/waitlist.csv`. Dashboard records, counts, filters, status changes, phone reveals and exports use that file. Supporting rate-limit, audit and deletion evidence is stored in `operations.json` alongside it. Files are created on first use, outside `public/`, with private permissions.
 
-Create a libSQL database in your Turso account, obtain its URL and database auth token, and set server-only `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`. See [Turso's SDK reference](https://docs.turso.tech/sdk/ts/reference).
+## Deploy on your VPS
 
-Set the same values locally before running `npm run db:setup` once to initialise the remote database. Setup is idempotent and preserves records. It is explicit, not run during builds or requests. Vercel must use a remote database; local file storage is rejected there. Vercel and a VPS can use the same hosted Turso database. The VPS may alternatively use an explicit persistent `file:` path with private backups.
+Install dependencies, copy your private `.env.local` to the server, build with `npm run build`, and run `npm start` under PM2 or systemd behind HTTPS. Set `WAITLIST_DATA_DIR` to a persistent **absolute private directory**, for example `/var/lib/payam/waitlist`, owned by the Node service account. Keep this directory across deployments and back it up privately. It must never be inside the web root, Git, or a deployment folder that gets replaced.
 
-Configure these settings in the hosting dashboard as well as locally:
+Use the same `WAITLIST_ADMIN_EMAIL`, `WAITLIST_ADMIN_PASSWORD_HASH`, `WAITLIST_SESSION_SECRET` and `IP_HASH_SALT`. Set `NEXT_PUBLIC_SITE_URL` to your domain. Production signup verification also requires matching `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` for that domain.
 
-- `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` (token is unnecessary for explicit local files).
-- `WAITLIST_ADMIN_EMAIL`, `WAITLIST_ADMIN_PASSWORD_HASH`, `WAITLIST_SESSION_SECRET`, `IP_HASH_SALT`.
-- `NEXT_PUBLIC_SITE_URL` for the public domain.
-- Production: matching `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`.
+CSV storage requires one shared persistent disk. **Vercel is not supported for collecting persistent records in this mode.** Requests fail rather than pretend records were saved. Multiple Node processes on the same VPS share a cross-process lock. Atomic replacement and a private recovery journal protect interrupted writes. Do not manually edit the CSV while the site runs. For backup, stop writes and copy the entire data directory, including any pending journal. Deletion requests must also be honoured in backup retention.
 
-The password hash may be raw bcrypt or base64-encoded bcrypt from `npm run admin:hash`. Session secret and privacy salt must each be at least 32 characters. Keep salts stable for existing data; never commit secrets. Restart/redeploy after configuration changes. Optional `TURSO_DASHBOARD_URL` adds an admin shortcut.
+## Existing Turso data
 
-## Checks and data handling
+Optional `npm run waitlist:import-turso` reads your old `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to preserve existing signups and audit evidence in the CSV store. It refuses to overwrite an existing CSV. Hosted records are never deleted by this command. The import journal is completed by the next application request. Turso credentials are only needed for this one-off migration, not daily operation.
+
+## Checks
 
 ```sh
 npm test
@@ -43,4 +36,4 @@ npm run build
 npm run check:bundle
 ```
 
-Integration tests use an isolated SQLite database and cover duplicate protection, referrals, filters, masked phones, CSV data, status changes, deletion audit evidence and rate limits. The application does not fabricate signup success when storage fails. Admin actions require an authenticated server session; full phone reveals are audited. Exports contain personal data and must be transferred privately. Legacy Supabase schema is retained only as migration reference; existing remote records are not transferred automatically.
+File-backed integration tests cover persistence, concurrency, duplicate protection, CSV escaping, masked phones, referrals, dashboard filtering, audit/deletion, rate limits, public signup and admin sessions. Customer data and credentials are not committed.

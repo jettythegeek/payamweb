@@ -1,7 +1,10 @@
 import 'server-only';
-import { database } from './turso';
-export async function rateLimit(key: string, windowSeconds: number, max: number) {
- const now = Math.floor(Date.now()/1000);
- const result = await database().execute({ sql: `INSERT INTO rate_limits(key,hits,expires_at) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET hits=CASE WHEN expires_at<=? THEN 1 ELSE hits+1 END,expires_at=CASE WHEN expires_at<=? THEN excluded.expires_at ELSE expires_at END RETURNING hits`, args: [key,now+windowSeconds,now,now] });
- return Number(result.rows[0].hits) <= max;
+import { withFiles } from './csv-storage';
+export function rateLimit(key:string,windowSeconds:number,max:number) {
+ return withFiles(state=>{
+  const now=Math.floor(Date.now()/1000);
+  for(const [key,value] of Object.entries(state.meta.rates))if(value.expires<=now)delete state.meta.rates[key];
+  const rate=state.meta.rates[key]||{hits:0,expires:now+windowSeconds};rate.hits++;state.meta.rates[key]=rate;
+  return rate.hits<=max;
+ });
 }

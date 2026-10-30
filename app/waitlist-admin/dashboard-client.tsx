@@ -1,12 +1,16 @@
 'use client';
 import { Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type AdminRow = { id:number; phone_masked:string; city:string; roles:string[]; email:string|null; email_opt_in:boolean; wa_consent:boolean; consent_text_version:string; referral_code:string; referred_by_code:string|null; utm_source:string|null; status:string; created_at:string };
 
 export function DashboardClient({ rows }: { rows: AdminRow[] }) {
   const router = useRouter(); const [revealed, setRevealed] = useState<Record<number,string>>({}); const [message,setMessage]=useState('');
+  useEffect(() => {
+    const interval = setInterval(() => { if (!document.hidden) router.refresh(); }, 60_000);
+    return () => clearInterval(interval);
+  }, [router]);
   async function post(path:string, body:unknown) { const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); if(!r.ok) throw new Error('Request failed'); return r.json(); }
   async function revealPhone(id:number){try{const r=await post('/api/waitlist-admin/reveal',{id});setRevealed(v=>({...v,[id]:r.phone}));}catch{setMessage('Could not reveal that number.');}}
   async function status(id:number,next:string){try{await post('/api/waitlist-admin/status',{id,status:next});router.refresh();}catch{setMessage('Could not update that signup.');}}
