@@ -16,6 +16,12 @@ Open `http://127.0.0.1:3005`. Apply `supabase/migrations/20261030120000_waitlist
 
 Generate the initial admin password hash interactively with `npm run admin:hash`, and create a random `WAITLIST_SESSION_SECRET` of at least 32 characters. The admin email defaults to `waitlist@payam.ng`; change the environment value if needed.
 
+For a fresh local checkout, run `node scripts/setup-local-admin.mjs` from the website directory. It generates a password and writes the admin email, encoded password hash, session secret and privacy salt to ignored `.env.local`. It refuses to overwrite an existing admin password. Keep the printed credentials private. This does not create or connect a database.
+
+Both signup completion and admin login require `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, with the SQL migration applied. Production also requires the matching Turnstile site/secret keys. Set these on the actual hosting environment as well as locally, and restart the server after configuration changes. Never commit credentials. Missing database configuration must not be replaced with fake signup success.
+
+`WAITLIST_ADMIN_PASSWORD_HASH` accepts either the base64 output from `admin:hash` or a raw bcrypt hash; never put a plaintext password in this setting. The privacy salt and session secret must each be at least 32 characters.
+
 ## Validation
 
 ```bash

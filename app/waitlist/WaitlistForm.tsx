@@ -22,7 +22,7 @@ const ROLE_ERROR = 'Pick at least one way you’ll use Payam.'
 const CONSENT_ERROR =
   "Tick the box so we can message you on WhatsApp. Without it, we can't tell you when we launch."
 const NETWORK_ERROR =
-  "We couldn't save your details. Check your connection and try again — nothing was lost."
+  "We couldn't save your details. Please try again. Your entries are still in the form."
 
 const ROLE_COPY: Record<WaitlistRole, { title: string; detail: string }> = {
   use: { title: 'I want to use Payam', detail: 'Pay bills, shop, book help, ride' },
@@ -37,7 +37,7 @@ type Errors = Partial<Record<'phone' | 'city' | 'roles' | 'email' | 'consent' | 
 type Outcome =
   | { kind: 'joined'; code: string; city: string; count: number }
   | { kind: 'duplicate' }
-  | { kind: 'network' | 'rate' | 'verification' }
+  | { kind: 'network' | 'rate' | 'verification' | 'unavailable' | 'invalid' }
 
 function plausible(event: string) {
   if (!process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN) return
@@ -251,6 +251,8 @@ export function WaitlistForm({
         plausible('waitlist_duplicate')
       } else if (response.status === 429) setOutcome({ kind: 'rate' })
       else if (response.status === 422 && 'error' in body && body.error === 'verification_failed') setOutcome({ kind: 'verification' })
+      else if (response.status === 422) setOutcome({ kind: 'invalid' })
+      else if (response.status >= 500) setOutcome({ kind: 'unavailable' })
       else setOutcome({ kind: 'network' })
     } catch {
       setOutcome({ kind: 'network' })
@@ -325,6 +327,8 @@ export function WaitlistForm({
 }
 
 function OutcomeAlert({ outcome }: { outcome: Exclude<Outcome, { kind: 'joined' | 'duplicate' }> }) {
+  if (outcome.kind === 'unavailable') return <div className="wl-alert wl-alert--danger" role="status"><strong>We couldn’t save your signup yet</strong><span>Please try again later. Your entries are still here.</span></div>
+  if (outcome.kind === 'invalid') return <div className="wl-alert" role="status"><strong>Check your details</strong><span>Please check the form and try again in a moment.</span></div>
   if (outcome.kind === 'rate') return <div className="wl-alert" role="status"><strong>Too many tries</strong><span>Please wait a minute, then try again.</span></div>
   if (outcome.kind === 'verification') return <div className="wl-alert" role="status"><strong>Security check needed</strong><span>Please complete the security check and try again.</span></div>
   return <div className="wl-alert wl-alert--danger" role="status"><strong>Network wahala</strong><span>{NETWORK_ERROR}</span></div>

@@ -18,7 +18,15 @@ function sign(value: string, secret: string) {
 }
 
 export function adminConfigured(): boolean {
-  return Boolean(process.env.WAITLIST_ADMIN_EMAIL && process.env.WAITLIST_ADMIN_PASSWORD_HASH && sessionSecret());
+  return Boolean(process.env.WAITLIST_ADMIN_EMAIL && adminPasswordHash() && sessionSecret() && (process.env.IP_HASH_SALT?.length || 0) >= 32);
+}
+
+/** Accept the documented base64 format and raw bcrypt hashes from hosting dashboards. */
+export function adminPasswordHash(): string | null {
+ const value = process.env.WAITLIST_ADMIN_PASSWORD_HASH?.trim();
+ if (!value) return null;
+ const decoded = value.startsWith('$2') ? value : Buffer.from(value, 'base64').toString('utf8');
+ return /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(decoded) ? decoded : null;
 }
 
 export function createAdminSession(now = Math.floor(Date.now() / 1000)): string {

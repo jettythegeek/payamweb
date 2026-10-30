@@ -22,6 +22,11 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
   const unmountTestimonials = root.current ? mountTestimonials(root.current) : () => {};
   const unmountMotion = root.current ? mountSiteMotion(root.current) : () => {};
   function click(event: MouseEvent) {
+   const link = (event.target as Element).closest('a[href]');
+   if (link?.closest('.reference-menu')) {
+    root.current?.querySelector('.reference-menu')?.remove();
+    root.current?.querySelector('[aria-label="Open menu"]')?.setAttribute('aria-expanded', 'false');
+   }
    const target = (event.target as Element).closest('button');
    if (!target || !root.current?.contains(target)) return;
    if (target.closest('.wl')) return;
@@ -32,7 +37,7 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
     if (old) { old.remove(); target.setAttribute('aria-expanded','false'); return; }
     const menu = document.createElement('nav'); menu.className='reference-menu'; menu.setAttribute('aria-label','Navigation');
     root.current.querySelectorAll('header a[href]').forEach(a => menu.append(a.cloneNode(true)));
-    if (!menu.children.length) menu.innerHTML='<a href="/">Home</a><a href="/deals">Deals</a><a href="/help">Help</a>';
+    if (!menu.children.length) menu.innerHTML='<a href="/#about-payam">About Payam</a><a href="/#how-it-works">How it works</a><a href="/#join">Join the waitlist</a>';
     root.current.append(menu); target.setAttribute('aria-expanded','true');
    }
    const panelId=target.getAttribute('aria-controls');

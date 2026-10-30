@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 
-import { ADMIN_COOKIE, SESSION_SECONDS, adminConfigured, createAdminSession, isSecureRequest } from '../../../../lib/admin-auth';
+import { ADMIN_COOKIE, SESSION_SECONDS, adminConfigured, adminPasswordHash, createAdminSession, isSecureRequest } from '../../../../lib/admin-auth';
 import { adminJson } from '../../../../lib/admin-request';
 import { rateLimit } from '../../../../lib/rate-limit';
 import { getClientIp, hasSameOrigin, hashPrivateValue, safeEqualText } from '../../../../lib/request-security';
@@ -29,8 +29,7 @@ export async function POST(request: Request) {
   }
 
   const configuredEmail = process.env.WAITLIST_ADMIN_EMAIL!.trim().toLowerCase();
-  let configuredHash = DUMMY_HASH;
-  try { configuredHash = Buffer.from(process.env.WAITLIST_ADMIN_PASSWORD_HASH!, 'base64').toString('utf8') || DUMMY_HASH; } catch { /* dummy comparison below */ }
+  const configuredHash = adminPasswordHash() || DUMMY_HASH;
   const emailMatches = safeEqualText(email.padEnd(Math.max(email.length, configuredEmail.length), '\0'), configuredEmail.padEnd(Math.max(email.length, configuredEmail.length), '\0'));
   const passwordMatches = await bcrypt.compare(password, emailMatches ? configuredHash : DUMMY_HASH);
   if (!emailMatches || !passwordMatches) {
