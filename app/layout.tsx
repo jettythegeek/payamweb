@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './styles/category-masonry.css';
+import './styles/payam-footer.css';
 import './styles/waitlist.css';
 import './styles/waitlist-responsive.css';
 import './styles/business-waitlist.css';

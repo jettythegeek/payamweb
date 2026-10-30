@@ -7,13 +7,16 @@ import { mountTestimonials } from './testimonial-carousel';
 import { mountSiteMotion } from './site-motion';
 import { WaitlistForm } from './waitlist/WaitlistForm';
 import { BusinessWaitlistSection } from './waitlist/BusinessWaitlistSection';
+import { PayamFooter } from './PayamFooter';
 import { PAYAM_LEGAL_ENTITY, PAYAM_WHATSAPP_NUMBER } from './site-config';
 export default function Reference({ markup, bodyClass }: { markup: string; bodyClass: string }) {
  const root = useRef<HTMLDivElement>(null);
  const [waitlistSlots, setWaitlistSlots] = useState<HTMLElement[]>([]);
+ const [footerSlots, setFooterSlots] = useState<HTMLElement[]>([]);
  useEffect(() => {
   document.body.className = bodyClass;
   setWaitlistSlots(Array.from(root.current?.querySelectorAll<HTMLElement>('[data-waitlist-slot]') ?? []));
+  setFooterSlots(Array.from(root.current?.querySelectorAll<HTMLElement>('[data-payam-footer-slot]') ?? []));
   const unmountCarousel = root.current ? mountAboutCarousel(root.current) : () => {};
   const unmountArch = root.current ? mountCategoryArch(root.current) : () => {};
   const unmountTestimonials = root.current ? mountTestimonials(root.current) : () => {};
@@ -40,5 +43,5 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
   }
   document.addEventListener('click',click); return () => { document.removeEventListener('click',click); unmountMotion(); unmountCarousel(); unmountArch(); unmountTestimonials(); };
  },[bodyClass, markup]);
- return <><div ref={root} dangerouslySetInnerHTML={{ __html: markup }} />{waitlistSlots.map((slot) => createPortal(slot.dataset.waitlistSlot === 'business' ? <BusinessWaitlistSection /> : <WaitlistForm variant="hero" legalEntity={PAYAM_LEGAL_ENTITY} whatsappNumber={PAYAM_WHATSAPP_NUMBER} />, slot))}</>;
+ return <><div ref={root} dangerouslySetInnerHTML={{ __html: markup }} />{waitlistSlots.map((slot) => createPortal(slot.dataset.waitlistSlot === 'business' ? <BusinessWaitlistSection /> : <WaitlistForm variant="hero" legalEntity={PAYAM_LEGAL_ENTITY} whatsappNumber={PAYAM_WHATSAPP_NUMBER} />, slot))}{footerSlots.map((slot) => createPortal(<PayamFooter />, slot))}</>;
 }
