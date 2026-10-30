@@ -21,6 +21,7 @@ export default function Reference({ markup, bodyClass }: { markup: string; bodyC
   function click(event: MouseEvent) {
    const target = (event.target as Element).closest('button');
    if (!target || !root.current?.contains(target)) return;
+   if (target.closest('.wl')) return;
    const label = target.getAttribute('aria-label') || '';
    if (label === 'Scroll to top') window.scrollTo({ top:0, behavior:'smooth' });
    if (label === 'Open menu') {
