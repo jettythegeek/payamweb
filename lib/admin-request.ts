@@ -1,12 +1,10 @@
 import 'server-only';
 
-import { ADMIN_COOKIE, verifyAdminSession } from './admin-auth';
 import { getClientIp, hasSameOrigin, hashPrivateValue } from './request-security';
 
+/** Auth is disabled so the waitlist admin page and APIs are openly readable/usable. */
 export function authorizedAdminRequest(request: Request, csrf = false): { ok: true; ipHash: string } | { ok: false; status: number } {
   if (csrf && !hasSameOrigin(request)) return { ok: false, status: 403 };
-  const cookie = request.headers.get('cookie')?.split(';').map((v) => v.trim()).find((v) => v.startsWith(`${ADMIN_COOKIE}=`))?.slice(ADMIN_COOKIE.length + 1);
-  if (!verifyAdminSession(cookie)) return { ok: false, status: 401 };
   return { ok: true, ipHash: hashPrivateValue(getClientIp(request.headers)) };
 }
 
