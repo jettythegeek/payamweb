@@ -1,0 +1,118 @@
+/* Payam category masonry ("Explore your everyday", section#deals).
+   Self-contained: the site's compiled Tailwind cannot add new utilities, so every rule lives here.
+   Import once from app/layout.tsx:  import './styles/category-masonry.css';  */
+.pm-cats { background: var(--payam-canvas, #F7F9FC); font-family: inherit; /* site font (Plus Jakarta Sans after Part A) */ }
+.pm-cats__inner { max-width: 1520px; margin: 0 auto; padding: 0 20px 40px; }
+.pm-cats__grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 224px;
+  grid-template-areas:
+    "hero   hero"
+    "hero   hero"
+    "food   pay"
+    "food   shop"
+    "trans  trans"
+    "serv   groc"
+    "health biz";
+}
+.pm-cat { position: relative; isolation: isolate; overflow: hidden; border-radius: 20px; color: #fff; display: flex; flex-direction: column; padding: 18px 16px 16px; min-width: 0; }
+.pm-cat--hero { grid-area: hero; padding: 28px 24px; }
+.pm-cat--food { grid-area: food; } .pm-cat--payments { grid-area: pay; } .pm-cat--shopping { grid-area: shop; }
+.pm-cat--grocery { grid-area: groc; } .pm-cat--transport { grid-area: trans; } .pm-cat--services { grid-area: serv; }
+.pm-cat--health { grid-area: health; } .pm-cat--business { grid-area: biz; }
+
+/* Tones: rotate so no two touching cards share a colour (desktop and mobile). */
+.pm-tone-blue  { background: #1137A4; --pm-s1: #20D46B; --pm-s2: #2851CB; }
+.pm-tone-green { background: #0D965A; --pm-s1: #20D46B; --pm-s2: #2851CB; }
+.pm-tone-navy  { background: #07142A; --pm-s1: #2851CB; --pm-s2: #20D46B; }
+
+/* Organic shapes, drawn in CSS so the photos stay clean cut-outs. */
+.pm-cat__shape { position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; }
+.pm-cat__shape--a { width: var(--pm-a-size, 150%); aspect-ratio: 1; right: var(--pm-a-r, -95%); bottom: var(--pm-a-b, -70%); background: var(--pm-s1); }
+.pm-cat__shape--b { width: var(--pm-b-size, 110%); aspect-ratio: 1; right: var(--pm-b-r, -78%); bottom: var(--pm-b-b, -40%); background: var(--pm-s2); }
+
+.pm-cat__text { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 6px; max-width: var(--pm-text-w, 100%); }
+.pm-cat__title { margin: 0; font-weight: 600; font-size: 19px; line-height: 1.12; letter-spacing: -0.3px; }
+.pm-cat__sub { margin: 0; font-size: 12.5px; line-height: 1.35; color: rgb(255 255 255 / 86%); }
+.pm-cat--hero .pm-cat__title { font-size: 40px; line-height: 1.08; letter-spacing: -1.2px; max-width: 240px; }
+.pm-cat--hero .pm-cat__sub { font-size: 15px; max-width: 220px; }
+.pm-cat--hero .pm-cat__text { gap: 10px; }
+.pm-cat__btn { position: relative; z-index: 4; margin-top: 14px; display: inline-flex; align-items: center; width: fit-content; height: 48px; padding: 0 24px; border-radius: 20px; background: #fff; color: #0C1425; font-size: 15px; font-weight: 600; text-decoration: none; box-shadow: 0 10px 15px rgb(0 0 0 / 5%), 0 4px 6px rgb(0 0 0 / 5%); }
+.pm-cat__btn:hover { background: #F1F5FF; }
+
+.pm-cat__links { position: static; margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.pm-cat__more { position: static; color: #fff; font-size: 13px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; display: inline-flex; align-items: center; gap: 6px; }
+.pm-cat__more svg { width: 14px; height: 14px; }
+.pm-cat__more::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; } /* whole card is the click target */
+.pm-cat__more > * { position: relative; z-index: 4; }
+.pm-cat__join { position: relative; z-index: 4; color: rgb(255 255 255 / 86%); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.pm-cat__more:focus-visible, .pm-cat__join:focus-visible, .pm-cat__btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 6px; }
+
+.pm-cat__img { position: absolute; z-index: 0; display: block; max-width: none; pointer-events: none; user-select: none;
+  height: var(--pm-ih, auto); width: var(--pm-iw, auto); right: var(--pm-ir, 0); bottom: var(--pm-ib, 0); top: var(--pm-it, auto); }
+
+/* Mobile image placement (2-col, 212px rows) */
+.pm-cat--hero     { --pm-ih: 76%; --pm-ib: -10%; --pm-ir: -4px;  --pm-a-size: 95%;  --pm-a-r: -30%; --pm-a-b: -42%; --pm-b-size: 60%; --pm-b-r: -22%; --pm-b-b: 52%; }
+.pm-cat--food     { --pm-iw: 136%; --pm-ib: 78px; --pm-ir: -44%; --pm-a-size: 140%; --pm-a-r: -80%; --pm-a-b: -30%; --pm-b-size: 90%; --pm-b-r: -60%; --pm-b-b: 40%; }
+.pm-cat--payments { --pm-ih: 58%; --pm-ir: -8px; --pm-a-size: 120%; --pm-a-r: -62%; --pm-a-b: -70%; --pm-b-size: 70%; --pm-b-r: -40%; --pm-b-b: 30%; }
+.pm-cat--shopping { --pm-ih: 54%; --pm-ir: -14px; --pm-ib: -4px; --pm-a-size: 130%; --pm-a-r: -75%; --pm-a-b: -60%; --pm-b-size: 70%; --pm-b-r: -45%; --pm-b-b: 34%; }
+.pm-cat--grocery  { --pm-iw: 70%; --pm-ib: -4px; --pm-ir: -8%; --pm-a-size: 120%; --pm-a-r: -60%; --pm-a-b: -70%; --pm-b-size: 70%; --pm-b-r: -42%; --pm-b-b: 30%; }
+.pm-cat--transport{ --pm-ih: 74%; --pm-ib: -6px; --pm-ir: 4px; --pm-text-w: 46%; --pm-a-size: 70%; --pm-a-r: -14%; --pm-a-b: -90%; --pm-b-size: 40%; --pm-b-r: -10%; --pm-b-b: 40%; }
+.pm-cat--services { --pm-ih: 54%; --pm-ir: -16px; --pm-a-size: 120%; --pm-a-r: -62%; --pm-a-b: -70%; --pm-b-size: 70%; --pm-b-r: -40%; --pm-b-b: 30%; }
+.pm-cat--health   { --pm-iw: 54%; --pm-ib: 4px; --pm-ir: -10px; --pm-a-size: 120%; --pm-a-r: -60%; --pm-a-b: -70%; --pm-b-size: 70%; --pm-b-r: -40%; --pm-b-b: 30%; }
+.pm-cat--business { --pm-ih: 58%; --pm-ir: -8px; --pm-a-size: 120%; --pm-a-r: -62%; --pm-a-b: -70%; --pm-b-size: 70%; --pm-b-r: -40%; --pm-b-b: 30%; }
+/* In small 1x1 tiles the photo sits under the links; keep the links readable. */
+.pm-cat:not(.pm-cat--hero):not(.pm-cat--transport) .pm-cat__links { max-width: 58%; }
+
+@media (min-width: 768px) {
+  .pm-cats__inner { padding: 0 40px 64px; }
+  .pm-cats__grid { gap: 16px; grid-auto-rows: 250px; }
+  .pm-cat { border-radius: 32px; padding: 26px 24px 22px; }
+  .pm-cat--hero { padding: 44px 40px; }
+  .pm-cat__title { font-size: 24px; } .pm-cat__sub { font-size: 14px; }
+  .pm-cat--hero .pm-cat__title { font-size: 52px; max-width: 360px; } .pm-cat--hero .pm-cat__sub { font-size: 17px; max-width: 300px; }
+  .pm-cat__more { font-size: 15px; } .pm-cat__join { font-size: 13px; }
+  .pm-cat__text { max-width: var(--pm-text-w, 62%); }
+  .pm-cat--hero .pm-cat__text { max-width: 52%; }
+  /* Image placement, tablet and up (tiles are about 330-370 px wide) */
+  .pm-cat--hero     { --pm-ih: 124%; --pm-ib: -24%; --pm-ir: 0px; --pm-a-size: 82%; --pm-a-r: -26%; --pm-a-b: -44%; --pm-b-size: 50%; --pm-b-r: -16%; --pm-b-b: 58%; }
+  .pm-cat--food     { --pm-iw: 134%; --pm-ih: auto; --pm-ib: 74px; --pm-ir: -40%; --pm-a-size: 150%; --pm-a-r: -90%; --pm-a-b: -38%; --pm-b-size: 90%; --pm-b-r: -62%; --pm-b-b: 52%; }
+  .pm-cat--payments { --pm-ih: 104%; --pm-ib: -4%; --pm-ir: -14px; --pm-a-size: 82%; --pm-a-r: -34%; --pm-a-b: -56%; --pm-b-size: 44%; --pm-b-r: -16%; --pm-b-b: 52%; }
+  .pm-cat--shopping { --pm-ih: 86%; --pm-ib: -6px; --pm-ir: -6px; --pm-a-size: 150%; --pm-a-r: -86%; --pm-a-b: -52%; --pm-b-size: 80%; --pm-b-r: -54%; --pm-b-b: 34%; }
+  .pm-cat--transport{ --pm-ih: 108%; --pm-ib: -6%; --pm-ir: 16px; --pm-text-w: 40%; --pm-a-size: 64%; --pm-a-r: -10%; --pm-a-b: -110%; --pm-b-size: 30%; --pm-b-r: -6%; --pm-b-b: 50%; }
+  .pm-cat--services { --pm-ih: 104%; --pm-ib: -4%; --pm-ir: -18px; --pm-a-size: 82%; --pm-a-r: -34%; --pm-a-b: -56%; --pm-b-size: 44%; --pm-b-r: -16%; --pm-b-b: 52%; }
+  .pm-cat--health   { --pm-iw: 46%; --pm-ih: auto; --pm-ib: 12px; --pm-ir: 6px; --pm-a-size: 82%; --pm-a-r: -34%; --pm-a-b: -56%; --pm-b-size: 44%; --pm-b-r: -16%; --pm-b-b: 52%; }
+  .pm-cat--business { --pm-ih: 104%; --pm-ib: -4%; --pm-ir: -12px; --pm-a-size: 82%; --pm-a-r: -34%; --pm-a-b: -56%; --pm-b-size: 44%; --pm-b-r: -16%; --pm-b-b: 52%; }
+  .pm-cat--grocery  { --pm-iw: 64%; --pm-ib: 8px; --pm-ir: -8%; --pm-a-size: 82%; --pm-a-r: -34%; --pm-a-b: -56%; --pm-b-size: 44%; --pm-b-r: -16%; --pm-b-b: 52%; }
+  .pm-cat:not(.pm-cat--hero):not(.pm-cat--transport) .pm-cat__links { max-width: 52%; }
+}
+
+@media (min-width: 1024px) {
+  .pm-cats__inner { padding: 0 40px 64px; }
+  .pm-cats__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 236px;
+    grid-template-areas:
+      "hero  hero  food   pay"
+      "hero  hero  food   shop"
+      "groc  trans trans  shop"
+      "groc  serv  health biz";
+  }
+  .pm-cat { border-radius: 40px; padding: 30px 28px 26px; }
+  .pm-cat--hero { border-radius: 50px; padding: 56px 52px; }
+  .pm-cat__title { font-size: 26px; }
+  .pm-cat--hero .pm-cat__title { font-size: 64px; letter-spacing: -1.28px; max-width: 460px; }
+  .pm-cat--hero .pm-cat__text { gap: 18px; }
+  .pm-cat--hero .pm-cat__btn { height: 60px; padding: 0 28px; font-size: 16px; margin-top: 22px; }
+  .pm-cat__text { max-width: var(--pm-text-w, 56%); }
+  .pm-cat--food, .pm-cat--shopping, .pm-cat--grocery { --pm-text-w: 100%; }
+
+  .pm-cat--shopping { --pm-ih: 66%; }
+  .pm-cat--grocery  { --pm-iw: 108%; --pm-ih: auto; --pm-ib: 60px; --pm-ir: -22%; --pm-a-size: 150%; --pm-a-r: -86%; --pm-a-b: -48%; --pm-b-size: 80%; --pm-b-r: -54%; --pm-b-b: 42%; }
+  .pm-cat:not(.pm-cat--hero):not(.pm-cat--transport) .pm-cat__links { max-width: 52%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pm-cat__img { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .pm-cat:hover .pm-cat__img { transform: translateY(-4px) scale(1.02); }
+}

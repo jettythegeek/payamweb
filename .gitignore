@@ -2,7 +2,13 @@ node_modules/
 .next/
 out/
 .env*
+!.env.example
 
 *.tsbuildinfo
 __pycache__/
 *.pyc
+
+.data/
+*.db
+*.db-shm
+*.db-wal

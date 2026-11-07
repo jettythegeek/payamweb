@@ -9,7 +9,7 @@ export function mountSiteMotion(root: HTMLElement) {
   const context = gsap.context(() => {
    const hero = root.querySelector('main > section');
    if (hero) {
-    gsap.from(hero.querySelectorAll('h1, h1 + div, img[src*="hero-phone"]'), {
+    gsap.from(hero.querySelectorAll('h1, h1 + div, img[src*="hero-phone"], img[src*="hero-lifestyle"]'), {
      y: 24, opacity: 0, duration: .85, stagger: .12, ease: 'power2.out', clearProps: 'transform,opacity',
     });
    }
@@ -33,10 +33,25 @@ export function mountSiteMotion(root: HTMLElement) {
     y: 35, opacity: 0, duration: .8, stagger: .16, ease: 'power2.out', clearProps: 'transform,opacity',
     scrollTrigger: { trigger: '#how-it-works', start: 'top 70%', once: true },
    });
+   root.querySelectorAll<HTMLElement>('.payam-family-visual, .payam-business-visual').forEach(visual => {
+    gsap.from(visual, {
+     y: 24, opacity: 0, duration: .85, ease: 'power2.out', clearProps: 'transform,opacity',
+     scrollTrigger: { trigger: visual, start: 'top 85%', once: true },
+    });
+   });
+   root.querySelectorAll<HTMLElement>('.payam-family-tags, .payam-audience-tags').forEach(group => {
+    gsap.from(group.children, {
+     y: 12, opacity: 0, duration: .45, stagger: .08, ease: 'power2.out', clearProps: 'transform,opacity',
+     scrollTrigger: { trigger: group, start: 'top 92%', once: true },
+    });
+   });
    // Keep slider tracks and fixed illustration placements under their own animation controllers.
    root.querySelectorAll<HTMLElement>('a[role="button"], .payam-campaign-button').forEach(button => {
     if (button.getAttribute('href') === '#') return;
-    const enter = () => gsap.to(button, { y: -3, duration: .2, ease: 'power2.out', overwrite: 'auto' });
+    const enter = () => {
+     if (matchMedia('(hover: hover)').matches || document.activeElement === button)
+      gsap.to(button, { y: -3, duration: .2, ease: 'power2.out', overwrite: 'auto' });
+    };
     const leave = () => gsap.to(button, { y: 0, duration: .25, ease: 'power2.out', overwrite: 'auto', clearProps: 'transform' });
     button.addEventListener('mouseenter', enter); button.addEventListener('mouseleave', leave);
     button.addEventListener('focus', enter); button.addEventListener('blur', leave);
@@ -49,5 +64,15 @@ export function mountSiteMotion(root: HTMLElement) {
   }, root);
   return () => { listeners.splice(0).forEach(cleanup => cleanup()); context.revert(); };
  });
- return () => media.revert();
+ // Lazy images and font loading can change the scroll positions after mounting.
+ let disposed = false;
+ const refresh = () => { if (!disposed) ScrollTrigger.refresh(); };
+ root.addEventListener('load', refresh, true);
+ document.fonts.ready.then(refresh);
+ const refreshFrame = requestAnimationFrame(refresh);
+ return () => {
+  disposed = true; cancelAnimationFrame(refreshFrame);
+  root.removeEventListener('load', refresh, true);
+  media.revert();
+ };
 }

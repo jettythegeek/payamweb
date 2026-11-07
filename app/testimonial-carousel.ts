@@ -1,7 +1,11 @@
 export function mountTestimonials(root: HTMLElement) {
  const viewport = root.querySelector<HTMLElement>('[data-testimonial-viewport]');
  const track = viewport?.querySelector<HTMLElement>('[data-testimonial-track]');
- if (!viewport || !track || matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
+ if (!viewport || !track) return () => {};
+ const motion = matchMedia('(prefers-reduced-motion: reduce)');
+ viewport.tabIndex = 0;
+ viewport.setAttribute('role', 'region');
+ viewport.setAttribute('aria-label', 'Testimonials. Scrolling pauses while focused.');
  const originals = Array.from(track.children) as HTMLElement[];
  const copies = originals.map(card => {
   const copy = card.cloneNode(true) as HTMLElement;
@@ -15,7 +19,7 @@ export function mountTestimonials(root: HTMLElement) {
   const delta = previous ? Math.min(now - previous, 64) : 0;
   previous = now;
   const distance = copies[0].offsetLeft - originals[0].offsetLeft;
-  if (!hovered && !focused && !document.hidden && distance > 0) {
+  if (!motion.matches && !hovered && !focused && !document.hidden && distance > 0) {
    offset = (offset + delta * 0.025) % distance;
    track!.style.transform = `translateX(${-offset}px)`;
   }
@@ -25,6 +29,11 @@ export function mountTestimonials(root: HTMLElement) {
  const leave = () => { hovered = false; };
  const focus = () => { focused = true; };
  const blur = (event: FocusEvent) => { focused = viewport.contains(event.relatedTarget as Node); };
+ const change = () => {
+  if (motion.matches) { offset = 0; track.style.transform = ''; viewport.style.overflowX = 'auto'; }
+  else { viewport.style.overflowX = ''; viewport.scrollLeft = 0; }
+ };
+ motion.addEventListener('change', change); change();
  viewport.addEventListener('mouseenter', enter);
  viewport.addEventListener('mouseleave', leave);
  viewport.addEventListener('focusin', focus);
@@ -39,5 +48,8 @@ export function mountTestimonials(root: HTMLElement) {
   viewport.removeEventListener('mouseleave', leave);
   viewport.removeEventListener('focusin', focus);
   viewport.removeEventListener('focusout', blur);
+  motion.removeEventListener('change', change);
+  viewport.style.overflowX = '';
+  viewport.removeAttribute('tabindex'); viewport.removeAttribute('role'); viewport.removeAttribute('aria-label');
  };
 }

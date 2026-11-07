@@ -1,0 +1,226 @@
+/* The restored hero keeps number entry compact without changing the shared form states. */
+.payam-waitlist-slot .wl-phone-row {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 1fr) auto;
+  max-width: 620px;
+  margin-inline: auto;
+}
+
+.payam-waitlist-slot .wl-step-one > .wl-label {
+  max-width: 620px;
+  margin-inline: auto;
+}
+
+.payam-waitlist-slot .wl-phone-row input {
+  min-width: 0;
+  width: auto;
+}
+
+.payam-waitlist-slot .wl-phone-row .wl-button {
+  width: auto;
+  white-space: nowrap;
+}
+
+.payam-waitlist-slot .wl-chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.payam-waitlist-slot .wl-chips svg {
+  width: 16px;
+  height: 16px;
+  color: #2851cb;
+  stroke-width: 1.9;
+  flex: none;
+}
+
+.wl-static-phone > span:last-child,
+.wl-secure,
+.wl-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.wl-secure {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.wl-static-phone > span:last-child svg,
+.wl-secure svg,
+.wl-back svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.wl-city-trigger {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.wl-city-trigger svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wl-muted);
+  flex: none;
+}
+
+.wl-city-search {
+  align-items: center;
+  background: var(--wl-canvas);
+  border-radius: 12px;
+  display: flex;
+  gap: 9px;
+  margin-bottom: 6px;
+  padding: 0 12px;
+}
+
+.wl-city-search svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.wl-city-search input {
+  background: transparent;
+  border: 0;
+  color: var(--wl-ink);
+  font: inherit;
+  min-height: 48px;
+  outline: 0;
+  width: 100%;
+}
+
+.wl-listbox button > svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.wl-other-option {
+  border-top: 1px solid var(--wl-line) !important;
+  margin-top: 5px;
+}
+
+.wl-role-icon {
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  color: var(--wl-blue);
+  display: flex;
+  flex: 0 0 44px;
+  height: 44px;
+  justify-content: center;
+}
+
+.wl-role-icon svg,
+.wl-check svg,
+.wl-result-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wl-progress-row {
+  align-items: center;
+  color: var(--wl-muted);
+  display: flex;
+  font-size: 13px;
+  justify-content: space-between;
+  margin: -10px 0 7px;
+}
+
+.wl-progress-row strong {
+  color: var(--wl-blue);
+  font-weight: 700;
+}
+
+.wl-progress {
+  background: #e8edf7;
+  border-radius: 999px;
+  height: 7px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.wl-progress > span {
+  background: var(--wl-blue);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  width: 50%;
+}
+
+.wl-success-animation {
+  height: 112px;
+  margin: -10px auto 4px;
+  width: 112px;
+}
+
+.wl-success-animation > svg {
+  color: var(--wl-green);
+  height: 100%;
+  width: 100%;
+}
+
+.wl-panel-number svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wl-panel .wl-button,
+.wl-copy button,
+.wl-share a,
+.wl-referrals {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.wl-panel .wl-button svg,
+.wl-copy button svg,
+.wl-share a svg,
+.wl-referrals svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+
+.wl-referrals {
+  justify-content: center;
+}
+
+
+.wl-check svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 640px) {
+  .payam-waitlist-slot .wl-phone-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    max-width: 100%;
+  }
+
+  .payam-waitlist-slot .wl-phone-row .wl-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .payam-waitlist-slot .wl-step-one > .wl-label {
+    max-width: 100%;
+  }
+
+  .wl-secure {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
